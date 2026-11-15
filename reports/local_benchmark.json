@@ -1,0 +1,21 @@
+{
+  "model": "b3",
+  "python": "3.13.9",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "device": "cpu",
+  "start_to_ready_ms": 10468.46,
+  "model_load_ms": 8665.6,
+  "start_to_first_result_ms": 10499.96,
+  "first_request_ms": 31.43,
+  "second_request_ms": 21.57,
+  "sampled_peak_process_rss_mib": 663.5,
+  "rss_sampling_interval_ms": 50,
+  "song_ids": [
+    [
+      "482406"
+    ],
+    [
+      "482406"
+    ]
+  ]
+}

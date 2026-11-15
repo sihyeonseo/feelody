@@ -1,0 +1,3067 @@
+{
+  "split": "FeelodyModern01",
+  "scope": "dev only",
+  "n_dev": 114,
+  "reserved_ids": [
+    "D_005",
+    "D_007",
+    "D_020",
+    "D_025",
+    "D_027",
+    "D_031",
+    "D_035",
+    "D_043",
+    "D_044",
+    "D_046",
+    "D_049",
+    "D_053",
+    "D_060",
+    "D_061",
+    "D_064",
+    "D_066",
+    "D_074",
+    "D_086",
+    "D_089",
+    "D_097",
+    "D_102",
+    "D_105",
+    "D_111",
+    "D_113",
+    "D_123",
+    "D_130",
+    "D_133",
+    "D_138"
+  ],
+  "reference_ranking_unit": "unique lyric groups; ties share best rank",
+  "tie_atol": 1e-08,
+  "source_sha256": "fef8b6281ac1573350dcec165407699215b93414b6fc3eb914da75bfdc1de1f4",
+  "script_sha256": "1eeb90a76066ed9492edfa33d2cb5d009d0608cff055e291792708296f8658ca",
+  "b3_sha256": "4e1c376c26fef9f7e979aa877d0879d1e50bceff84a4c06ae42371abd9990934",
+  "index_manifest": {
+    "experiment": "B1_e5_chunk_weighted_mean_v01",
+    "model_id": "intfloat/multilingual-e5-small",
+    "revision": "614241f622f53c4eeff9890bdc4f31cfecc418b3",
+    "created_at_utc": "2026-10-22T07:32:10.589216+00:00",
+    "catalog_sha256": "d1ccf99cb5d1dea094399842e8cfe91c4d4862c34cecf0a90f5edbb3b921e98b",
+    "code_sha256": "8c6759c669438a15675d8ec6c15cd93850aa9af02731eb72d2b2e6469022ec05",
+    "files_sha256": {
+      "embeddings.npy": "17f2ae303680e13a59cf3ad7baa000d0249e66c8a1fcd5102b70bd3e898a544a",
+      "groups.json": "94cd68790a96891b454a2c7cc8063ef1690fb60cec21f710e79cce1065de9021"
+    },
+    "python": "3.13.9",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "packages": {
+      "torch": "2.9.0+cpu",
+      "transformers": "4.57.1",
+      "numpy": "2.3.5",
+      "huggingface-hub": "0.36.2",
+      "tokenizers": "0.22.2",
+      "safetensors": "0.8.0"
+    },
+    "device": "cpu",
+    "batch_size": 8,
+    "chunk_tokens": 384,
+    "overlap_tokens": 0,
+    "aggregation": "content_token_weighted_mean_of_unit_chunk_vectors_then_l2",
+    "document_prefix": "passage: ",
+    "query_prefix": "query: ",
+    "tie_atol": 1e-08,
+    "songs": 2244,
+    "lyric_groups": 2242,
+    "multi_chunk_groups": 973,
+    "chunks_total": 3256,
+    "embedding_dimension": 384,
+    "embedding_seconds": 488.82699109999885,
+    "fine_tuned": false,
+    "quality_evaluated": false,
+    "score_display": "100 * cosine; range -100..100; NOT probability"
+  },
+  "run_packages": {
+    "torch": "2.9.0+cpu",
+    "transformers": "4.57.1",
+    "numpy": "2.3.5",
+    "huggingface-hub": "0.36.2",
+    "tokenizers": "0.22.2",
+    "safetensors": "0.8.0"
+  },
+  "metrics": {
+    "B1": {
+      "reference_hit_at_1": 0.03508771929824561,
+      "reference_hit_at_5": 0.07017543859649122,
+      "reference_hit_at_20": 0.10526315789473684,
+      "reference_hit_at_50": 0.14035087719298245
+    },
+    "B3": {
+      "reference_hit_at_1": 0.017543859649122806,
+      "reference_hit_at_5": 0.03508771929824561,
+      "reference_hit_at_20": 0.06140350877192982,
+      "reference_hit_at_50": 0.11403508771929824
+    }
+  },
+  "rows": [
+    {
+      "diary_id": "D_001",
+      "reference_id": "34847378",
+      "models": {
+        "B1": {
+          "reference_rank": 1532,
+          "top_tracks": [
+            {
+              "song_id": "510421",
+              "title": "그런 날이 오겠죠",
+              "artist": "신승훈"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1125,
+          "top_tracks": [
+            {
+              "song_id": "32059630",
+              "title": "조금 취했어 (Prod. 2soo)",
+              "artist": "임재현"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_002",
+      "reference_id": "34754292",
+      "models": {
+        "B1": {
+          "reference_rank": 1698,
+          "top_tracks": [
+            {
+              "song_id": "5415175",
+              "title": "화장 지웠어 (Feat. Zion.T, HA:TFELT) (No Make Up)",
+              "artist": "개코"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1867,
+          "top_tracks": [
+            {
+              "song_id": "32187544",
+              "title": "우리 왜 헤어져야 해",
+              "artist": "신예영"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_003",
+      "reference_id": "34431086",
+      "models": {
+        "B1": {
+          "reference_rank": 4,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 226,
+          "top_tracks": [
+            {
+              "song_id": "5572312",
+              "title": "그냥 (Just)",
+              "artist": "Zion.T, Crush"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_004",
+      "reference_id": "34657844",
+      "models": {
+        "B1": {
+          "reference_rank": 100,
+          "top_tracks": [
+            {
+              "song_id": "606079",
+              "title": "시간을 찾아서 (Feat. 이적)",
+              "artist": "김진표"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 771,
+          "top_tracks": [
+            {
+              "song_id": "30383758",
+              "title": "Lonely (Feat. 태연)",
+              "artist": "종현 (JONGHYUN)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_006",
+      "reference_id": "34349913",
+      "models": {
+        "B1": {
+          "reference_rank": 978,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1121,
+          "top_tracks": [
+            {
+              "song_id": "1469335",
+              "title": "Never Mind",
+              "artist": "빅마마"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_008",
+      "reference_id": "33496587",
+      "models": {
+        "B1": {
+          "reference_rank": 131,
+          "top_tracks": [
+            {
+              "song_id": "460363",
+              "title": "난(亂)",
+              "artist": "옥주현"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 324,
+          "top_tracks": [
+            {
+              "song_id": "32570501",
+              "title": "서면역에서",
+              "artist": "순순희"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_009",
+      "reference_id": "34997078",
+      "models": {
+        "B1": {
+          "reference_rank": 2214,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 2029,
+          "top_tracks": [
+            {
+              "song_id": "7891119",
+              "title": "OOH-AHH하게",
+              "artist": "TWICE (트와이스)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_010",
+      "reference_id": "34927767",
+      "models": {
+        "B1": {
+          "reference_rank": 325,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 2104,
+          "top_tracks": [
+            {
+              "song_id": "2101157",
+              "title": "심장이 없어",
+              "artist": "에이트"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_011",
+      "reference_id": "33480898",
+      "models": {
+        "B1": {
+          "reference_rank": 31,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 11,
+          "top_tracks": [
+            {
+              "song_id": "24105",
+              "title": "Jumpo Mambo",
+              "artist": "쿨 (COOL)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_012",
+      "reference_id": "34626109",
+      "models": {
+        "B1": {
+          "reference_rank": 1809,
+          "top_tracks": [
+            {
+              "song_id": "5415175",
+              "title": "화장 지웠어 (Feat. Zion.T, HA:TFELT) (No Make Up)",
+              "artist": "개코"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 469,
+          "top_tracks": [
+            {
+              "song_id": "1469335",
+              "title": "Never Mind",
+              "artist": "빅마마"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_013",
+      "reference_id": "34256568",
+      "models": {
+        "B1": {
+          "reference_rank": 229,
+          "top_tracks": [
+            {
+              "song_id": "606079",
+              "title": "시간을 찾아서 (Feat. 이적)",
+              "artist": "김진표"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 123,
+          "top_tracks": [
+            {
+              "song_id": "31189241",
+              "title": "너나 해 (Egotistic)",
+              "artist": "마마무 (Mamamoo)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_014",
+      "reference_id": "34772475",
+      "models": {
+        "B1": {
+          "reference_rank": 1922,
+          "top_tracks": [
+            {
+              "song_id": "46163",
+              "title": "그대 내게 묻는다면",
+              "artist": "유리상자"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 481,
+          "top_tracks": [
+            {
+              "song_id": "609381",
+              "title": "니가 참 좋아",
+              "artist": "쥬얼리"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_015",
+      "reference_id": "35454426",
+      "models": {
+        "B1": {
+          "reference_rank": 873,
+          "top_tracks": [
+            {
+              "song_id": "516204",
+              "title": "이제서야",
+              "artist": "김동률"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1246,
+          "top_tracks": [
+            {
+              "song_id": "432940",
+              "title": "여정",
+              "artist": "왁스"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_016",
+      "reference_id": "34752700",
+      "models": {
+        "B1": {
+          "reference_rank": 188,
+          "top_tracks": [
+            {
+              "song_id": "5826447",
+              "title": "겁 (Feat. 태양)",
+              "artist": "MINO (송민호)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 12,
+          "top_tracks": [
+            {
+              "song_id": "32978341",
+              "title": "DON'T TOUCH ME",
+              "artist": "환불원정대"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_017",
+      "reference_id": "35454425",
+      "models": {
+        "B1": {
+          "reference_rank": 1386,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1101,
+          "top_tracks": [
+            {
+              "song_id": "33480898",
+              "title": "신호등",
+              "artist": "이무진"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_018",
+      "reference_id": "35546497",
+      "models": {
+        "B1": {
+          "reference_rank": 1895,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1900,
+          "top_tracks": [
+            {
+              "song_id": "1797713",
+              "title": "다시 시작해보자",
+              "artist": "김동률"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_019",
+      "reference_id": "34943312",
+      "models": {
+        "B1": {
+          "reference_rank": 1551,
+          "top_tracks": [
+            {
+              "song_id": "3685853",
+              "title": "이럴 줄 알았어",
+              "artist": "비스트"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1104,
+          "top_tracks": [
+            {
+              "song_id": "5804238",
+              "title": "I Feel You",
+              "artist": "원더걸스"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_021",
+      "reference_id": "34875621",
+      "models": {
+        "B1": {
+          "reference_rank": 158,
+          "top_tracks": [
+            {
+              "song_id": "5415175",
+              "title": "화장 지웠어 (Feat. Zion.T, HA:TFELT) (No Make Up)",
+              "artist": "개코"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 656,
+          "top_tracks": [
+            {
+              "song_id": "8189661",
+              "title": "쏘쏘",
+              "artist": "백아연"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_022",
+      "reference_id": "33487342",
+      "models": {
+        "B1": {
+          "reference_rank": 820,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 50,
+          "top_tracks": [
+            {
+              "song_id": "3471644",
+              "title": "말하는 대로",
+              "artist": "처진 달팽이 (유재석 & 이적)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_023",
+      "reference_id": "34298499",
+      "models": {
+        "B1": {
+          "reference_rank": 1236,
+          "top_tracks": [
+            {
+              "song_id": "516204",
+              "title": "이제서야",
+              "artist": "김동률"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 181,
+          "top_tracks": [
+            {
+              "song_id": "32187544",
+              "title": "우리 왜 헤어져야 해",
+              "artist": "신예영"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_024",
+      "reference_id": "34481680",
+      "models": {
+        "B1": {
+          "reference_rank": 136,
+          "top_tracks": [
+            {
+              "song_id": "516204",
+              "title": "이제서야",
+              "artist": "김동률"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 50,
+          "top_tracks": [
+            {
+              "song_id": "3928294",
+              "title": "남자 없이 잘 살아",
+              "artist": "미쓰에이"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_026",
+      "reference_id": "4446485",
+      "models": {
+        "B1": {
+          "reference_rank": 320,
+          "top_tracks": [
+            {
+              "song_id": "606079",
+              "title": "시간을 찾아서 (Feat. 이적)",
+              "artist": "김진표"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 195,
+          "top_tracks": [
+            {
+              "song_id": "32570501",
+              "title": "서면역에서",
+              "artist": "순순희"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_028",
+      "reference_id": "34701627",
+      "models": {
+        "B1": {
+          "reference_rank": 1108,
+          "top_tracks": [
+            {
+              "song_id": "623250",
+              "title": "보통날",
+              "artist": "god"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 732,
+          "top_tracks": [
+            {
+              "song_id": "30230986",
+              "title": "우리집을 못 찾겠군요 (Feat. 볼빨간사춘기)",
+              "artist": "매드클라운"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_029",
+      "reference_id": "33978183",
+      "models": {
+        "B1": {
+          "reference_rank": 129,
+          "top_tracks": [
+            {
+              "song_id": "30399360",
+              "title": "미치고 싶다",
+              "artist": "한동근"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 363,
+          "top_tracks": [
+            {
+              "song_id": "1901874",
+              "title": "이노래",
+              "artist": "2am"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_030",
+      "reference_id": "32872978",
+      "models": {
+        "B1": {
+          "reference_rank": 2195,
+          "top_tracks": [
+            {
+              "song_id": "4660909",
+              "title": "사람냄새",
+              "artist": "정인, 개리"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 576,
+          "top_tracks": [
+            {
+              "song_id": "4004361",
+              "title": "시작이 좋아 (Feat. 강민희 Of 미스에스)",
+              "artist": "버벌진트"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_032",
+      "reference_id": "34538515",
+      "models": {
+        "B1": {
+          "reference_rank": 595,
+          "top_tracks": [
+            {
+              "song_id": "46163",
+              "title": "그대 내게 묻는다면",
+              "artist": "유리상자"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1080,
+          "top_tracks": [
+            {
+              "song_id": "3996508",
+              "title": "혼자라고 생각말기 (슈퍼스타 K5 송희진 오디션 참가곡)",
+              "artist": "김보경 (NEON)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_033",
+      "reference_id": "33655994",
+      "models": {
+        "B1": {
+          "reference_rank": 1,
+          "top_tracks": [
+            {
+              "song_id": "33655994",
+              "title": "Weekend",
+              "artist": "태연 (TAEYEON)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 99,
+          "top_tracks": [
+            {
+              "song_id": "9956",
+              "title": "왠지 느낌이 좋아",
+              "artist": "여행스케치"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_034",
+      "reference_id": "35009233",
+      "models": {
+        "B1": {
+          "reference_rank": 700,
+          "top_tracks": [
+            {
+              "song_id": "5415175",
+              "title": "화장 지웠어 (Feat. Zion.T, HA:TFELT) (No Make Up)",
+              "artist": "개코"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1380,
+          "top_tracks": [
+            {
+              "song_id": "5620266",
+              "title": "The Time Goes On",
+              "artist": "BewhY (비와이)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_036",
+      "reference_id": "35542908",
+      "models": {
+        "B1": {
+          "reference_rank": 2077,
+          "top_tracks": [
+            {
+              "song_id": "30566061",
+              "title": "N분의1 (Feat. 다이나믹듀오)",
+              "artist": "넉살, 한해, RYNO (라이노), 조우찬"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 950,
+          "top_tracks": [
+            {
+              "song_id": "8184472",
+              "title": "자격지심 (Feat. 은하 Of 여자친구)",
+              "artist": "박경"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_037",
+      "reference_id": "34599917",
+      "models": {
+        "B1": {
+          "reference_rank": 1595,
+          "top_tracks": [
+            {
+              "song_id": "1797713",
+              "title": "다시 시작해보자",
+              "artist": "김동률"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1261,
+          "top_tracks": [
+            {
+              "song_id": "18357",
+              "title": "좋은 사람 (Feat. 김형중)",
+              "artist": "토이 (Toy)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_038",
+      "reference_id": "33061995",
+      "models": {
+        "B1": {
+          "reference_rank": 2091,
+          "top_tracks": [
+            {
+              "song_id": "46163",
+              "title": "그대 내게 묻는다면",
+              "artist": "유리상자"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1577,
+          "top_tracks": [
+            {
+              "song_id": "482406",
+              "title": "Secret",
+              "artist": "제이워크"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_039",
+      "reference_id": "35595136",
+      "models": {
+        "B1": {
+          "reference_rank": 246,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 267,
+          "top_tracks": [
+            {
+              "song_id": "35937396",
+              "title": "NOT SORRY (Feat. pH-1) (Prod. by Slom)",
+              "artist": "이영지"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_040",
+      "reference_id": "34398735",
+      "models": {
+        "B1": {
+          "reference_rank": 217,
+          "top_tracks": [
+            {
+              "song_id": "46163",
+              "title": "그대 내게 묻는다면",
+              "artist": "유리상자"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 345,
+          "top_tracks": [
+            {
+              "song_id": "4091105",
+              "title": "봄봄봄",
+              "artist": "로이킴"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_041",
+      "reference_id": "30962526",
+      "models": {
+        "B1": {
+          "reference_rank": 827,
+          "top_tracks": [
+            {
+              "song_id": "30215199",
+              "title": "기다렸다 가",
+              "artist": "다이나믹 듀오, 첸 (CHEN)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 792,
+          "top_tracks": [
+            {
+              "song_id": "18357",
+              "title": "좋은 사람 (Feat. 김형중)",
+              "artist": "토이 (Toy)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_042",
+      "reference_id": "34360855",
+      "models": {
+        "B1": {
+          "reference_rank": 137,
+          "top_tracks": [
+            {
+              "song_id": "2101157",
+              "title": "심장이 없어",
+              "artist": "에이트"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 904,
+          "top_tracks": [
+            {
+              "song_id": "1029603",
+              "title": "Untouchable",
+              "artist": "Big4"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_045",
+      "reference_id": "3414749",
+      "models": {
+        "B1": {
+          "reference_rank": 13,
+          "top_tracks": [
+            {
+              "song_id": "510421",
+              "title": "그런 날이 오겠죠",
+              "artist": "신승훈"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 32,
+          "top_tracks": [
+            {
+              "song_id": "20226",
+              "title": "난 여자가 있는데 (CF - 컴팩 프리자리오)",
+              "artist": "박진영"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_047",
+      "reference_id": "34908740",
+      "models": {
+        "B1": {
+          "reference_rank": 134,
+          "top_tracks": [
+            {
+              "song_id": "4299165",
+              "title": "슬픈 혼잣말",
+              "artist": "임창정"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 363,
+          "top_tracks": [
+            {
+              "song_id": "1874996",
+              "title": "나만 바라봐",
+              "artist": "태양"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_048",
+      "reference_id": "33625988",
+      "models": {
+        "B1": {
+          "reference_rank": 718,
+          "top_tracks": [
+            {
+              "song_id": "606079",
+              "title": "시간을 찾아서 (Feat. 이적)",
+              "artist": "김진표"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 355,
+          "top_tracks": [
+            {
+              "song_id": "3570032",
+              "title": "Open Arms (Journey) (Feat. 크리스티나)",
+              "artist": "울랄라세션"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_050",
+      "reference_id": "34494149",
+      "models": {
+        "B1": {
+          "reference_rank": 1476,
+          "top_tracks": [
+            {
+              "song_id": "516204",
+              "title": "이제서야",
+              "artist": "김동률"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 917,
+          "top_tracks": [
+            {
+              "song_id": "3905489",
+              "title": "아프다",
+              "artist": "허각"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_051",
+      "reference_id": "35945927",
+      "models": {
+        "B1": {
+          "reference_rank": 1728,
+          "top_tracks": [
+            {
+              "song_id": "516204",
+              "title": "이제서야",
+              "artist": "김동률"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1063,
+          "top_tracks": [
+            {
+              "song_id": "34632789",
+              "title": "너, 너 (N번째 연애 X 휘인 (Whee In))",
+              "artist": "휘인 (Whee In)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_052",
+      "reference_id": "36356993",
+      "models": {
+        "B1": {
+          "reference_rank": 165,
+          "top_tracks": [
+            {
+              "song_id": "606079",
+              "title": "시간을 찾아서 (Feat. 이적)",
+              "artist": "김진표"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1089,
+          "top_tracks": [
+            {
+              "song_id": "1199560",
+              "title": "Street Life (Feat. Big Mama & Ill Skillz)",
+              "artist": "DJ DOC"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_054",
+      "reference_id": "36318125",
+      "models": {
+        "B1": {
+          "reference_rank": 441,
+          "top_tracks": [
+            {
+              "song_id": "4832150",
+              "title": "A Real Man",
+              "artist": "스윙스, 에일리(Ailee)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1,
+          "top_tracks": [
+            {
+              "song_id": "36318125",
+              "title": "Kitsch",
+              "artist": "IVE (아이브)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_055",
+      "reference_id": "36430773",
+      "models": {
+        "B1": {
+          "reference_rank": 1549,
+          "top_tracks": [
+            {
+              "song_id": "3538775",
+              "title": "좋아보여 (Feat. 검정치마)",
+              "artist": "버벌진트"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 194,
+          "top_tracks": [
+            {
+              "song_id": "35595136",
+              "title": "새삥 (Prod. ZICO) (Feat. 호미들)",
+              "artist": "지코 (ZICO)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_056",
+      "reference_id": "36382580",
+      "models": {
+        "B1": {
+          "reference_rank": 218,
+          "top_tracks": [
+            {
+              "song_id": "460363",
+              "title": "난(亂)",
+              "artist": "옥주현"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 620,
+          "top_tracks": [
+            {
+              "song_id": "32794652",
+              "title": "취기를 빌려 (취향저격 그녀 X 산들)",
+              "artist": "산들"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_057",
+      "reference_id": "36416114",
+      "models": {
+        "B1": {
+          "reference_rank": 1469,
+          "top_tracks": [
+            {
+              "song_id": "3726617",
+              "title": "자니 (Feat. Dynamic Duo)",
+              "artist": "프라이머리"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1046,
+          "top_tracks": [
+            {
+              "song_id": "30367365",
+              "title": "BLUE MOON (Prod. GroovyRoom)",
+              "artist": "효린, 창모 (CHANGMO)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_058",
+      "reference_id": "35729104",
+      "models": {
+        "B1": {
+          "reference_rank": 517,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 44,
+          "top_tracks": [
+            {
+              "song_id": "5620266",
+              "title": "The Time Goes On",
+              "artist": "BewhY (비와이)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_059",
+      "reference_id": "36599950",
+      "models": {
+        "B1": {
+          "reference_rank": 2078,
+          "top_tracks": [
+            {
+              "song_id": "516204",
+              "title": "이제서야",
+              "artist": "김동률"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1730,
+          "top_tracks": [
+            {
+              "song_id": "1469335",
+              "title": "Never Mind",
+              "artist": "빅마마"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_062",
+      "reference_id": "36331121",
+      "models": {
+        "B1": {
+          "reference_rank": 992,
+          "top_tracks": [
+            {
+              "song_id": "4192787",
+              "title": "아는사람 얘기",
+              "artist": "San E (산이)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1539,
+          "top_tracks": [
+            {
+              "song_id": "1913503",
+              "title": "착한 사람",
+              "artist": "BIGBANG (빅뱅)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_063",
+      "reference_id": "36105548",
+      "models": {
+        "B1": {
+          "reference_rank": 256,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 189,
+          "top_tracks": [
+            {
+              "song_id": "8252408",
+              "title": "Forever (Prod. By GRAY)",
+              "artist": "BewhY (비와이)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_065",
+      "reference_id": "36180700",
+      "models": {
+        "B1": {
+          "reference_rank": 354,
+          "top_tracks": [
+            {
+              "song_id": "46163",
+              "title": "그대 내게 묻는다면",
+              "artist": "유리상자"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 701,
+          "top_tracks": [
+            {
+              "song_id": "3536906",
+              "title": "사랑 사랑아",
+              "artist": "다비치"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_067",
+      "reference_id": "35931532",
+      "models": {
+        "B1": {
+          "reference_rank": 4,
+          "top_tracks": [
+            {
+              "song_id": "9828",
+              "title": "인형 (Duet 신혜성)",
+              "artist": "이지훈"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 43,
+          "top_tracks": [
+            {
+              "song_id": "1469335",
+              "title": "Never Mind",
+              "artist": "빅마마"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_068",
+      "reference_id": "36635522",
+      "models": {
+        "B1": {
+          "reference_rank": 596,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1286,
+          "top_tracks": [
+            {
+              "song_id": "32438894",
+              "title": "어떻게 지내 (Prod. By VAN.C)",
+              "artist": "오반(OVAN)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_069",
+      "reference_id": "35252996",
+      "models": {
+        "B1": {
+          "reference_rank": 606,
+          "top_tracks": [
+            {
+              "song_id": "847132",
+              "title": "체념 後(후)",
+              "artist": "빅마마"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1589,
+          "top_tracks": [
+            {
+              "song_id": "847132",
+              "title": "체념 後(후)",
+              "artist": "빅마마"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_070",
+      "reference_id": "36391236",
+      "models": {
+        "B1": {
+          "reference_rank": 95,
+          "top_tracks": [
+            {
+              "song_id": "2951700",
+              "title": "그땐 그땐 그땐",
+              "artist": "Supreme Team, 영준"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 89,
+          "top_tracks": [
+            {
+              "song_id": "916286",
+              "title": "Rising Sun (순수)",
+              "artist": "동방신기 (TVXQ!)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_071",
+      "reference_id": "35730562",
+      "models": {
+        "B1": {
+          "reference_rank": 1500,
+          "top_tracks": [
+            {
+              "song_id": "4011596",
+              "title": "눈물샤워 (Feat. 에일리)",
+              "artist": "배치기"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 930,
+          "top_tracks": [
+            {
+              "song_id": "419124",
+              "title": "편지",
+              "artist": "god"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_072",
+      "reference_id": "36713849",
+      "models": {
+        "B1": {
+          "reference_rank": 903,
+          "top_tracks": [
+            {
+              "song_id": "30215199",
+              "title": "기다렸다 가",
+              "artist": "다이나믹 듀오, 첸 (CHEN)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1656,
+          "top_tracks": [
+            {
+              "song_id": "5804238",
+              "title": "I Feel You",
+              "artist": "원더걸스"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_073",
+      "reference_id": "35643794",
+      "models": {
+        "B1": {
+          "reference_rank": 782,
+          "top_tracks": [
+            {
+              "song_id": "46163",
+              "title": "그대 내게 묻는다면",
+              "artist": "유리상자"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1223,
+          "top_tracks": [
+            {
+              "song_id": "31854442",
+              "title": "솔직하게 말해서 나",
+              "artist": "김나영"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_075",
+      "reference_id": "35008524",
+      "models": {
+        "B1": {
+          "reference_rank": 88,
+          "top_tracks": [
+            {
+              "song_id": "32156286",
+              "title": "늦은 밤 너의 집 앞 골목길에서",
+              "artist": "노을"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1315,
+          "top_tracks": [
+            {
+              "song_id": "8036303",
+              "title": "I Miss You",
+              "artist": "마마무 (Mamamoo)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_076",
+      "reference_id": "36404853",
+      "models": {
+        "B1": {
+          "reference_rank": 1,
+          "top_tracks": [
+            {
+              "song_id": "36404853",
+              "title": "물론",
+              "artist": "허각"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 29,
+          "top_tracks": [
+            {
+              "song_id": "7985298",
+              "title": "함께",
+              "artist": "노을"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_077",
+      "reference_id": "36334401",
+      "models": {
+        "B1": {
+          "reference_rank": 13,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 329,
+          "top_tracks": [
+            {
+              "song_id": "32438894",
+              "title": "어떻게 지내 (Prod. By VAN.C)",
+              "artist": "오반(OVAN)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_078",
+      "reference_id": "30244931",
+      "models": {
+        "B1": {
+          "reference_rank": 7,
+          "top_tracks": [
+            {
+              "song_id": "30215199",
+              "title": "기다렸다 가",
+              "artist": "다이나믹 듀오, 첸 (CHEN)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 62,
+          "top_tracks": [
+            {
+              "song_id": "4252728",
+              "title": "처음엔 사랑이란게",
+              "artist": "버스커 버스커"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_079",
+      "reference_id": "36034936",
+      "models": {
+        "B1": {
+          "reference_rank": 294,
+          "top_tracks": [
+            {
+              "song_id": "4660909",
+              "title": "사람냄새",
+              "artist": "정인, 개리"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 61,
+          "top_tracks": [
+            {
+              "song_id": "314563",
+              "title": "진실",
+              "artist": "쿨 (COOL)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_080",
+      "reference_id": "35640077",
+      "models": {
+        "B1": {
+          "reference_rank": 1870,
+          "top_tracks": [
+            {
+              "song_id": "5415175",
+              "title": "화장 지웠어 (Feat. Zion.T, HA:TFELT) (No Make Up)",
+              "artist": "개코"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 2140,
+          "top_tracks": [
+            {
+              "song_id": "36001290",
+              "title": "건물 사이에 피어난 장미 (Rose Blossom)",
+              "artist": "H1-KEY (하이키)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_081",
+      "reference_id": "35361345",
+      "models": {
+        "B1": {
+          "reference_rank": 1,
+          "top_tracks": [
+            {
+              "song_id": "35361345",
+              "title": "그라데이션",
+              "artist": "10CM"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 393,
+          "top_tracks": [
+            {
+              "song_id": "27561",
+              "title": "사슬",
+              "artist": "서문탁"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_082",
+      "reference_id": "36713850",
+      "models": {
+        "B1": {
+          "reference_rank": 346,
+          "top_tracks": [
+            {
+              "song_id": "30215199",
+              "title": "기다렸다 가",
+              "artist": "다이나믹 듀오, 첸 (CHEN)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1744,
+          "top_tracks": [
+            {
+              "song_id": "37271",
+              "title": "눈물",
+              "artist": "박화요비"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_083",
+      "reference_id": "36206259",
+      "models": {
+        "B1": {
+          "reference_rank": 199,
+          "top_tracks": [
+            {
+              "song_id": "516204",
+              "title": "이제서야",
+              "artist": "김동률"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 862,
+          "top_tracks": [
+            {
+              "song_id": "8004377",
+              "title": "니가 하면 로맨스 (Feat. 다비치)",
+              "artist": "케이윌"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_084",
+      "reference_id": "37140709",
+      "models": {
+        "B1": {
+          "reference_rank": 658,
+          "top_tracks": [
+            {
+              "song_id": "610483",
+              "title": "요즘 너는",
+              "artist": "이현우"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 841,
+          "top_tracks": [
+            {
+              "song_id": "31189241",
+              "title": "너나 해 (Egotistic)",
+              "artist": "마마무 (Mamamoo)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_085",
+      "reference_id": "37138469",
+      "models": {
+        "B1": {
+          "reference_rank": 4,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 14,
+          "top_tracks": [
+            {
+              "song_id": "32438894",
+              "title": "어떻게 지내 (Prod. By VAN.C)",
+              "artist": "오반(OVAN)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_087",
+      "reference_id": "37145732",
+      "models": {
+        "B1": {
+          "reference_rank": 298,
+          "top_tracks": [
+            {
+              "song_id": "33405149",
+              "title": "그냥 안아달란 말야",
+              "artist": "다비치"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 168,
+          "top_tracks": [
+            {
+              "song_id": "1944403",
+              "title": "죽을 만큼 사랑했어요",
+              "artist": "SG 워너비"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_088",
+      "reference_id": "31927275",
+      "models": {
+        "B1": {
+          "reference_rank": 910,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1936,
+          "top_tracks": [
+            {
+              "song_id": "444798",
+              "title": "Mr. A-Jo",
+              "artist": "애즈원"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_090",
+      "reference_id": "30232719",
+      "models": {
+        "B1": {
+          "reference_rank": 38,
+          "top_tracks": [
+            {
+              "song_id": "32156286",
+              "title": "늦은 밤 너의 집 앞 골목길에서",
+              "artist": "노을"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 140,
+          "top_tracks": [
+            {
+              "song_id": "3953192",
+              "title": "하지 못한 말",
+              "artist": "노을"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_091",
+      "reference_id": "37347911",
+      "models": {
+        "B1": {
+          "reference_rank": 1677,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 683,
+          "top_tracks": [
+            {
+              "song_id": "3570032",
+              "title": "Open Arms (Journey) (Feat. 크리스티나)",
+              "artist": "울랄라세션"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_092",
+      "reference_id": "37228861",
+      "models": {
+        "B1": {
+          "reference_rank": 650,
+          "top_tracks": [
+            {
+              "song_id": "91166",
+              "title": "천만에요",
+              "artist": "애즈원"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 189,
+          "top_tracks": [
+            {
+              "song_id": "444798",
+              "title": "Mr. A-Jo",
+              "artist": "애즈원"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_093",
+      "reference_id": "37373234",
+      "models": {
+        "B1": {
+          "reference_rank": 24,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 938,
+          "top_tracks": [
+            {
+              "song_id": "5760116",
+              "title": "맨정신",
+              "artist": "BIGBANG (빅뱅)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_094",
+      "reference_id": "37003911",
+      "models": {
+        "B1": {
+          "reference_rank": 224,
+          "top_tracks": [
+            {
+              "song_id": "5415175",
+              "title": "화장 지웠어 (Feat. Zion.T, HA:TFELT) (No Make Up)",
+              "artist": "개코"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 329,
+          "top_tracks": [
+            {
+              "song_id": "1469335",
+              "title": "Never Mind",
+              "artist": "빅마마"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_095",
+      "reference_id": "37053556",
+      "models": {
+        "B1": {
+          "reference_rank": 29,
+          "top_tracks": [
+            {
+              "song_id": "32473998",
+              "title": "좋은 사람 있으면 소개시켜줘",
+              "artist": "조이 (JOY)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 869,
+          "top_tracks": [
+            {
+              "song_id": "1099824",
+              "title": "태양의 눈물 (Tear Of The Sun)",
+              "artist": "KCM"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_096",
+      "reference_id": "36699489",
+      "models": {
+        "B1": {
+          "reference_rank": 303,
+          "top_tracks": [
+            {
+              "song_id": "105714",
+              "title": "니가 필요해",
+              "artist": "god"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 70,
+          "top_tracks": [
+            {
+              "song_id": "3436083",
+              "title": "끝사랑",
+              "artist": "김범수"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_098",
+      "reference_id": "37563682",
+      "models": {
+        "B1": {
+          "reference_rank": 1727,
+          "top_tracks": [
+            {
+              "song_id": "5415175",
+              "title": "화장 지웠어 (Feat. Zion.T, HA:TFELT) (No Make Up)",
+              "artist": "개코"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1604,
+          "top_tracks": [
+            {
+              "song_id": "4433490",
+              "title": "썸 (Feat. 릴보이 Of 긱스)",
+              "artist": "소유 (SOYOU), 정기고"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_099",
+      "reference_id": "37194943",
+      "models": {
+        "B1": {
+          "reference_rank": 1140,
+          "top_tracks": [
+            {
+              "song_id": "516204",
+              "title": "이제서야",
+              "artist": "김동률"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 557,
+          "top_tracks": [
+            {
+              "song_id": "4579474",
+              "title": "견딜만해 (Feat. 효린 Of 씨스타)",
+              "artist": "매드클라운"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_100",
+      "reference_id": "37323943",
+      "models": {
+        "B1": {
+          "reference_rank": 104,
+          "top_tracks": [
+            {
+              "song_id": "460363",
+              "title": "난(亂)",
+              "artist": "옥주현"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 5,
+          "top_tracks": [
+            {
+              "song_id": "3467462",
+              "title": "나만 부를 수 있는 노래",
+              "artist": "바닷길 (길 & 바다)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_101",
+      "reference_id": "37460832",
+      "models": {
+        "B1": {
+          "reference_rank": 365,
+          "top_tracks": [
+            {
+              "song_id": "3726617",
+              "title": "자니 (Feat. Dynamic Duo)",
+              "artist": "프라이머리"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 679,
+          "top_tracks": [
+            {
+              "song_id": "5760116",
+              "title": "맨정신",
+              "artist": "BIGBANG (빅뱅)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_103",
+      "reference_id": "34451383",
+      "models": {
+        "B1": {
+          "reference_rank": 64,
+          "top_tracks": [
+            {
+              "song_id": "32156286",
+              "title": "늦은 밤 너의 집 앞 골목길에서",
+              "artist": "노을"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 346,
+          "top_tracks": [
+            {
+              "song_id": "3471644",
+              "title": "말하는 대로",
+              "artist": "처진 달팽이 (유재석 & 이적)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_104",
+      "reference_id": "36910957",
+      "models": {
+        "B1": {
+          "reference_rank": 2228,
+          "top_tracks": [
+            {
+              "song_id": "32226962",
+              "title": "나의 오랜 연인에게",
+              "artist": "다비치"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 588,
+          "top_tracks": [
+            {
+              "song_id": "8274",
+              "title": "Je T'aime",
+              "artist": "해이"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_106",
+      "reference_id": "37463572",
+      "models": {
+        "B1": {
+          "reference_rank": 1545,
+          "top_tracks": [
+            {
+              "song_id": "30215199",
+              "title": "기다렸다 가",
+              "artist": "다이나믹 듀오, 첸 (CHEN)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1984,
+          "top_tracks": [
+            {
+              "song_id": "4138608",
+              "title": "바빠 (Bad Boy)",
+              "artist": "씨스타"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_107",
+      "reference_id": "32061975",
+      "models": {
+        "B1": {
+          "reference_rank": 65,
+          "top_tracks": [
+            {
+              "song_id": "516204",
+              "title": "이제서야",
+              "artist": "김동률"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 251,
+          "top_tracks": [
+            {
+              "song_id": "4024692",
+              "title": "있다 없으니까 (Gone Not Around Any Longer)",
+              "artist": "씨스타19"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_108",
+      "reference_id": "37344905",
+      "models": {
+        "B1": {
+          "reference_rank": 796,
+          "top_tracks": [
+            {
+              "song_id": "610483",
+              "title": "요즘 너는",
+              "artist": "이현우"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 980,
+          "top_tracks": [
+            {
+              "song_id": "30806580",
+              "title": "instagram",
+              "artist": "DEAN"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_109",
+      "reference_id": "37657039",
+      "models": {
+        "B1": {
+          "reference_rank": 190,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 2100,
+          "top_tracks": [
+            {
+              "song_id": "31406357",
+              "title": "신용재",
+              "artist": "하은 (포맨)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_110",
+      "reference_id": "37464459",
+      "models": {
+        "B1": {
+          "reference_rank": 1498,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1710,
+          "top_tracks": [
+            {
+              "song_id": "2101157",
+              "title": "심장이 없어",
+              "artist": "에이트"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_112",
+      "reference_id": "36616378",
+      "models": {
+        "B1": {
+          "reference_rank": 1,
+          "top_tracks": [
+            {
+              "song_id": "36616378",
+              "title": "사막에서 꽃을 피우듯",
+              "artist": "우디 (Woody)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1,
+          "top_tracks": [
+            {
+              "song_id": "36616378",
+              "title": "사막에서 꽃을 피우듯",
+              "artist": "우디 (Woody)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_114",
+      "reference_id": "37524038",
+      "models": {
+        "B1": {
+          "reference_rank": 1365,
+          "top_tracks": [
+            {
+              "song_id": "5415175",
+              "title": "화장 지웠어 (Feat. Zion.T, HA:TFELT) (No Make Up)",
+              "artist": "개코"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1868,
+          "top_tracks": [
+            {
+              "song_id": "4171462",
+              "title": "U & I",
+              "artist": "에일리(Ailee)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_115",
+      "reference_id": "37225604",
+      "models": {
+        "B1": {
+          "reference_rank": 696,
+          "top_tracks": [
+            {
+              "song_id": "30215199",
+              "title": "기다렸다 가",
+              "artist": "다이나믹 듀오, 첸 (CHEN)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1064,
+          "top_tracks": [
+            {
+              "song_id": "34481680",
+              "title": "드라마",
+              "artist": "아이유"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_116",
+      "reference_id": "36717264",
+      "models": {
+        "B1": {
+          "reference_rank": 287,
+          "top_tracks": [
+            {
+              "song_id": "32156286",
+              "title": "늦은 밤 너의 집 앞 골목길에서",
+              "artist": "노을"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1265,
+          "top_tracks": [
+            {
+              "song_id": "314563",
+              "title": "진실",
+              "artist": "쿨 (COOL)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_117",
+      "reference_id": "38120327",
+      "models": {
+        "B1": {
+          "reference_rank": 2108,
+          "top_tracks": [
+            {
+              "song_id": "5415175",
+              "title": "화장 지웠어 (Feat. Zion.T, HA:TFELT) (No Make Up)",
+              "artist": "개코"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 260,
+          "top_tracks": [
+            {
+              "song_id": "4594680",
+              "title": "요즘 바쁜가봐",
+              "artist": "2BIC(투빅)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_118",
+      "reference_id": "37069064",
+      "models": {
+        "B1": {
+          "reference_rank": 613,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 508,
+          "top_tracks": [
+            {
+              "song_id": "36206208",
+              "title": "사랑하기 싫어",
+              "artist": "지아"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_119",
+      "reference_id": "36397952",
+      "models": {
+        "B1": {
+          "reference_rank": 563,
+          "top_tracks": [
+            {
+              "song_id": "502946",
+              "title": "Rain",
+              "artist": "박혜경"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 751,
+          "top_tracks": [
+            {
+              "song_id": "2112982",
+              "title": "토요일밤에",
+              "artist": "손담비"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_120",
+      "reference_id": "38242510",
+      "models": {
+        "B1": {
+          "reference_rank": 889,
+          "top_tracks": [
+            {
+              "song_id": "5608760",
+              "title": "시작이 좋아 2015 (Prod. By 버벌진트)",
+              "artist": "지민, 임슬옹"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 156,
+          "top_tracks": [
+            {
+              "song_id": "3538775",
+              "title": "좋아보여 (Feat. 검정치마)",
+              "artist": "버벌진트"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_121",
+      "reference_id": "38123332",
+      "models": {
+        "B1": {
+          "reference_rank": 1225,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1840,
+          "top_tracks": [
+            {
+              "song_id": "1199560",
+              "title": "Street Life (Feat. Big Mama & Ill Skillz)",
+              "artist": "DJ DOC"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_122",
+      "reference_id": "38123338",
+      "models": {
+        "B1": {
+          "reference_rank": 598,
+          "top_tracks": [
+            {
+              "song_id": "606079",
+              "title": "시간을 찾아서 (Feat. 이적)",
+              "artist": "김진표"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1736,
+          "top_tracks": [
+            {
+              "song_id": "3590149",
+              "title": "그 남자 그 여자",
+              "artist": "포맨 (4MEN), 미(MIIII)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_124",
+      "reference_id": "38444825",
+      "models": {
+        "B1": {
+          "reference_rank": 1800,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 284,
+          "top_tracks": [
+            {
+              "song_id": "5760116",
+              "title": "맨정신",
+              "artist": "BIGBANG (빅뱅)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_125",
+      "reference_id": "38589554",
+      "models": {
+        "B1": {
+          "reference_rank": 2014,
+          "top_tracks": [
+            {
+              "song_id": "5415175",
+              "title": "화장 지웠어 (Feat. Zion.T, HA:TFELT) (No Make Up)",
+              "artist": "개코"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1192,
+          "top_tracks": [
+            {
+              "song_id": "3726617",
+              "title": "자니 (Feat. Dynamic Duo)",
+              "artist": "프라이머리"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_126",
+      "reference_id": "38626852",
+      "models": {
+        "B1": {
+          "reference_rank": 303,
+          "top_tracks": [
+            {
+              "song_id": "46163",
+              "title": "그대 내게 묻는다면",
+              "artist": "유리상자"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 579,
+          "top_tracks": [
+            {
+              "song_id": "3570032",
+              "title": "Open Arms (Journey) (Feat. 크리스티나)",
+              "artist": "울랄라세션"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_127",
+      "reference_id": "38629386",
+      "models": {
+        "B1": {
+          "reference_rank": 2201,
+          "top_tracks": [
+            {
+              "song_id": "516204",
+              "title": "이제서야",
+              "artist": "김동률"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1391,
+          "top_tracks": [
+            {
+              "song_id": "31684636",
+              "title": "노래방에서",
+              "artist": "장범준"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_128",
+      "reference_id": "38426197",
+      "models": {
+        "B1": {
+          "reference_rank": 294,
+          "top_tracks": [
+            {
+              "song_id": "606079",
+              "title": "시간을 찾아서 (Feat. 이적)",
+              "artist": "김진표"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 465,
+          "top_tracks": [
+            {
+              "song_id": "36206208",
+              "title": "사랑하기 싫어",
+              "artist": "지아"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_129",
+      "reference_id": "38300904",
+      "models": {
+        "B1": {
+          "reference_rank": 2223,
+          "top_tracks": [
+            {
+              "song_id": "431033",
+              "title": "구해주오",
+              "artist": "CB Mass"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1556,
+          "top_tracks": [
+            {
+              "song_id": "8218594",
+              "title": "먼 훗날",
+              "artist": "조 트리오"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_131",
+      "reference_id": "38733032",
+      "models": {
+        "B1": {
+          "reference_rank": 677,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 874,
+          "top_tracks": [
+            {
+              "song_id": "5760116",
+              "title": "맨정신",
+              "artist": "BIGBANG (빅뱅)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_132",
+      "reference_id": "38071559",
+      "models": {
+        "B1": {
+          "reference_rank": 4,
+          "top_tracks": [
+            {
+              "song_id": "606079",
+              "title": "시간을 찾아서 (Feat. 이적)",
+              "artist": "김진표"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 358,
+          "top_tracks": [
+            {
+              "song_id": "9642570",
+              "title": "넋두리",
+              "artist": "닐로(Nilo)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_134",
+      "reference_id": "38388023",
+      "models": {
+        "B1": {
+          "reference_rank": 1218,
+          "top_tracks": [
+            {
+              "song_id": "5415175",
+              "title": "화장 지웠어 (Feat. Zion.T, HA:TFELT) (No Make Up)",
+              "artist": "개코"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1665,
+          "top_tracks": [
+            {
+              "song_id": "33104090",
+              "title": "혼술하고 싶은 밤",
+              "artist": "벤"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_135",
+      "reference_id": "38164895",
+      "models": {
+        "B1": {
+          "reference_rank": 1392,
+          "top_tracks": [
+            {
+              "song_id": "1613082",
+              "title": "통증",
+              "artist": "거미 (GUMMY)"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 823,
+          "top_tracks": [
+            {
+              "song_id": "419124",
+              "title": "편지",
+              "artist": "god"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_136",
+      "reference_id": "39298775",
+      "models": {
+        "B1": {
+          "reference_rank": 2217,
+          "top_tracks": [
+            {
+              "song_id": "1575129",
+              "title": "수취인 불명",
+              "artist": "프리스타일"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1907,
+          "top_tracks": [
+            {
+              "song_id": "3488750",
+              "title": "Hate You",
+              "artist": "2NE1"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_137",
+      "reference_id": "38161297",
+      "models": {
+        "B1": {
+          "reference_rank": 1569,
+          "top_tracks": [
+            {
+              "song_id": "30566061",
+              "title": "N분의1 (Feat. 다이나믹듀오)",
+              "artist": "넉살, 한해, RYNO (라이노), 조우찬"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 2061,
+          "top_tracks": [
+            {
+              "song_id": "1469335",
+              "title": "Never Mind",
+              "artist": "빅마마"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_139",
+      "reference_id": "38516958",
+      "models": {
+        "B1": {
+          "reference_rank": 263,
+          "top_tracks": [
+            {
+              "song_id": "864907",
+              "title": "은영이에게 Part 2",
+              "artist": "KCM"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 694,
+          "top_tracks": [
+            {
+              "song_id": "2626610",
+              "title": "널 붙잡을 노래",
+              "artist": "비"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_140",
+      "reference_id": "38635449",
+      "models": {
+        "B1": {
+          "reference_rank": 612,
+          "top_tracks": [
+            {
+              "song_id": "32156286",
+              "title": "늦은 밤 너의 집 앞 골목길에서",
+              "artist": "노을"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 944,
+          "top_tracks": [
+            {
+              "song_id": "7985298",
+              "title": "함께",
+              "artist": "노을"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_141",
+      "reference_id": "38077932",
+      "models": {
+        "B1": {
+          "reference_rank": 537,
+          "top_tracks": [
+            {
+              "song_id": "38626852",
+              "title": "너에게 닿기를",
+              "artist": "10CM"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 1422,
+          "top_tracks": [
+            {
+              "song_id": "34298499",
+              "title": "리무진 (Feat. MINO) (Prod. GRAY)",
+              "artist": "BE'O (비오)"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "diary_id": "D_142",
+      "reference_id": "37375706",
+      "models": {
+        "B1": {
+          "reference_rank": 7,
+          "top_tracks": [
+            {
+              "song_id": "32794652",
+              "title": "취기를 빌려 (취향저격 그녀 X 산들)",
+              "artist": "산들"
+            }
+          ]
+        },
+        "B3": {
+          "reference_rank": 2,
+          "top_tracks": [
+            {
+              "song_id": "314563",
+              "title": "진실",
+              "artist": "쿨 (COOL)"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

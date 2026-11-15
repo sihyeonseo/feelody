@@ -1,0 +1,33 @@
+{
+  "catalog": {
+    "rows": 2600,
+    "unique_ids": 2262,
+    "valid_unique_ids": 2244,
+    "duplicate_id_extra_rows": 338,
+    "missing_unique_ids": 18,
+    "normalized_duplicate_groups": 2,
+    "year_range": [
+      2000,
+      2025
+    ]
+  },
+  "pilot": {
+    "n_diaries": 10,
+    "n_rated": 20,
+    "models": {
+      "B1": {
+        "top1_hit": 0.3,
+        "mean_emotion": 1
+      },
+      "B3": {
+        "top1_hit": 0.4,
+        "mean_emotion": 1.5
+      }
+    },
+    "definition": "Within diary: mean over tied distinct top lyric groups; then equal weight per diary. Hit: emotion_score >= 2."
+  },
+  "fusion_on_same_pilot": {
+    "hit": 0.3,
+    "emotion": 1.1
+  }
+}

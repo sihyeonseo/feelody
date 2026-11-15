@@ -1,0 +1,12 @@
+services:
+  web:
+    platform: linux/amd64
+    build: .
+    ports:
+      - "127.0.0.1:8766:8765"
+    environment:
+      FEEL_MODEL: b3
+    volumes:
+      - ../feelody_e5.py:/opt/feelody/feelody_e5.py:ro
+      - ../feelody_b3.py:/opt/feelody/feelody_b3.py:ro
+      - ../artifacts/b1_e5_v01:/opt/feelody/artifacts/b1_e5_v01:ro
