@@ -35,6 +35,7 @@ dist/
 .vercel/
 node_modules/
 !web/index.html
+!web/research.html
 !feelody_top3.html
 !web/cases.json
 !vercel.json
