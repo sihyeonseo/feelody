@@ -31,3 +31,5 @@ Vercel 화면에서도 실시간으로 사용하려면 다른 호스트에 이 A
     python -m modal deploy deploy/host_model.py
 
 배포 명령은 모델 파일을 준비하고 비공개 인덱스를 자신의 Modal 워크스페이스로 보낸다. 출력된 HTTPS 주소를 열면 같은 달력에서 실제 모델을 바로 쓸 수 있다. 기존 Vercel 달력을 사용하려면 프로젝트 Settings → Environment Variables에서 Production의 `FEELODY_API_ORIGIN`에 출력된 HTTPS origin(마지막 / 없이)을 입력하고 **Redeploy**한다. 두 주소를 서로 바꿔 넣지 않는다. `/healthz`에서 ready와 두 모델 ID를 확인할 수 있다. 엔드포인트는 URL을 아는 사람이 호출할 수 있으며 GPU 사용 비용이 발생할 수 있다. 공개 테스트 전에 계정 예산을 설정하고, 테스트 종료 후 `python -m modal app stop feelody-top3`로 중단할 수 있다.
+
+최신 로컬 호스트는 비동기 작업 조회와 선택형 AI 해설도 지원한다. [새 API·기존 ZIP 업그레이드·MCP 설정](jobs-and-mcp.md).

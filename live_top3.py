@@ -1,15 +1,11 @@
 """Feelody's 30→3 inference service. Run behind a separate model host, not Vercel static hosting."""
 import os
-from contextlib import asynccontextmanager
+from feelody_service import create_service
+from feelody_reasons import excerpts
 from pathlib import Path
-from threading import Lock
 
 import numpy as np
 import torch
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field
 from transformers import AutoConfig, AutoModelForSequenceClassification, AutoTokenizer
 from feelody_e5 import Encoder, read_json, sha256_file
 
@@ -52,7 +48,7 @@ class Pipeline:
             use_safetensors=True).to(self.device).eval()
 
     @torch.inference_mode()
-    def recommend(self, diary):
+    def rank(self, diary):
         q, _ = self.enc.encode([diary], "query: ")
         idx = select(self.mat @ q[0], self.gs, 30)
         candidates = [self.gs[i] for i in idx]
@@ -62,52 +58,19 @@ class Pipeline:
             tokens = self.tok([diary] * len(lyrics), lyrics, max_length=512, padding=True,
                               truncation=True, return_token_type_ids=False, return_tensors="pt")
             logits.extend(self.rr(**tokens.to(self.device)).logits.reshape(-1).tolist())
-        result = []
+        result, evidence = [], []
         for i in select(logits, candidates, 3):
             track = candidates[i]["songs"][0]
-            result.append({"title": track["title"], "artist": track["artist"], "searchRank": i + 1})
-        return result
+            evidence.append(excerpts(candidates[i]["lyrics_text"]))
+            result.append({"song_id": str(track["song_id"]), "title": track["title"], "artist": track["artist"], "searchRank": i + 1})
+        return result, evidence
 
-
-class Entry(BaseModel):
-    diary: str = Field(min_length=1, max_length=4000)
+    def recommend(self, diary):
+        return self.rank(diary)[0]
 
 
 def create_app(factory=Pipeline):
-    lock = Lock()
-
-    @asynccontextmanager
-    async def lifespan(app):
-        app.state.engine = factory()
-        yield
-
-    app = FastAPI(lifespan=lifespan)
-    app.add_middleware(CORSMiddleware, allow_origins=[v.strip() for v in os.getenv(
-        "FEELODY_WEB_ORIGINS", "").split(",") if v.strip()], allow_methods=["POST"],
-        allow_headers=["Content-Type"])
-
-    @app.get("/healthz")
-    def health():
-        return {"status": "ready", "retriever": E5, "reranker": RR, "candidates": 30, "top": 3}
-
-    @app.get("/config.json")
-    def config():
-        return {"apiOrigin": "."}
-
-    @app.post("/recommend")
-    def recommend(entry: Entry):
-        diary = entry.diary.strip()
-        if not diary:
-            raise HTTPException(422, "빈 일기입니다.")
-        if not lock.acquire(blocking=False):
-            raise HTTPException(429, "다른 요청을 처리하고 있습니다.")
-        try:
-            return {"songs": app.state.engine.recommend(diary)}
-        finally:
-            lock.release()
-
-    app.mount("/", StaticFiles(directory=ROOT / "web", html=True), name="ui")
-    return app
+    return create_service(factory, E5, RR)
 
 
 app = create_app()

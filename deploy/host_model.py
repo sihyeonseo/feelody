@@ -13,8 +13,11 @@ image = (modal.Image.debian_slim(python_version="3.12")
                        "files=['*.json','model.safetensors','vocab.txt','sentencepiece.bpe.model']; "
                        "d('intfloat/multilingual-e5-large',revision='3d7cfbdacd47fdda877c5cd8a79fbcc4f2a574f3',allow_patterns=files); "
                        "d('nlpai-lab/KURE-Reranker-nano',revision='ad02a90a6bb00811bc9bfe9fdf2f0fdb7f89ad64',allow_patterns=files)\"")
-         .env({"HF_HUB_OFFLINE": "1","FEELODY_WEB_ORIGINS": os.getenv("FEELODY_WEB_ORIGINS", "")})
+         .env({"HF_HUB_OFFLINE": "1","FEELODY_SYNC_ONLY":"1","FEELODY_WEB_ORIGINS": os.getenv("FEELODY_WEB_ORIGINS", "")})
          .add_local_file(ROOT/"live_top3.py", "/opt/feelody/live_top3.py")
+         .add_local_file(ROOT/"feelody_service.py", "/opt/feelody/feelody_service.py")
+         .add_local_file(ROOT/"feelody_jobs.py", "/opt/feelody/feelody_jobs.py")
+         .add_local_file(ROOT/"feelody_reasons.py", "/opt/feelody/feelody_reasons.py")
          .add_local_file(ROOT/"feelody_e5.py", "/opt/feelody/feelody_e5.py")
          .add_local_file(ROOT/"artifacts/b1_e5_v01/groups.json", "/opt/feelody/artifacts/b1_e5_v01/groups.json")
          .add_local_dir(ROOT/"artifacts/modern_large_dev01", "/opt/feelody/artifacts/modern_large_dev01")

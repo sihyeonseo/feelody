@@ -1,4 +1,5 @@
 """Windows/macOS/Linux launcher for a private Feelody bundle."""
+import getpass
 import os
 from pathlib import Path
 import subprocess
@@ -15,8 +16,8 @@ def run(*args, **kwargs):
     subprocess.run(args, cwd=root, check=True, **kwargs)
 
 def main():
-    if len(sys.argv) != 2 or sys.argv[1] not in {"local", "cloud"}:
-        raise SystemExit("Usage: python deploy/start.py local|cloud")
+    if sys.argv[1:] not in (["local"], ["cloud"], ["local", "--reasons"]):
+        raise SystemExit("Usage: python deploy/start.py local [--reasons] | cloud")
     cloud = sys.argv[1] == "cloud"
     if not (root/"artifacts/b1_e5_v01/groups.json").is_file() or not (root/"artifacts/modern_large_dev01/manifest.json").is_file():
         raise SystemExit("비공개 실행 ZIP을 먼저 완전히 압축 해제해 주세요.")
@@ -39,6 +40,18 @@ def main():
         print("출력된 HTTPS 모델 주소를 Vercel의 FEELODY_API_ORIGIN (Production)에 넣고 Redeploy 하세요.")
     else:
         run(str(py), "-m", "pip", "install", "-r", "requirements.txt")
+        child_env = os.environ.copy()
+        if "--reasons" in sys.argv:
+            provider = input("키 발급처 (openai/gemini): ").strip().lower()
+            if provider not in {"openai", "gemini"}:
+                raise SystemExit("지원하는 발급처: openai, gemini")
+            model = input("계정에서 사용할 채팅 모델 ID: ").strip()
+            name = "OPENAI_API_KEY" if provider == "openai" else "GEMINI_API_KEY"
+            key = child_env.get(name) or getpass.getpass("서버용 API 키 (입력 숨김): ").strip()
+            if not model or not key:
+                raise SystemExit("모델 ID와 키가 필요합니다.")
+            child_env.update({name:key, "FEELODY_LLM_PROVIDER":provider, "FEELODY_LLM_MODEL":model,
+                              "FEELODY_LLM_ENABLED":"1"})
         def open_when_ready():
             deadline = monotonic()+600
             while monotonic()<deadline:
@@ -50,7 +63,7 @@ def main():
                     pass
                 sleep(2)
         Thread(target=open_when_ready,daemon=True).start()
-        run(str(py), "-m", "uvicorn", "live_top3:app", "--host", "127.0.0.1", "--port", "8765")
+        run(str(py), "-m", "uvicorn", "live_top3:app", "--host", "127.0.0.1", "--port", "8765", env=child_env)
 
 if __name__ == "__main__":
     main()
