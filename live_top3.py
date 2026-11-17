@@ -28,7 +28,7 @@ def select(scores, groups, k):
 
 class Pipeline:
     def __init__(self):
-        base = ROOT / "artifacts"
+        base = Path(os.environ.get("FEELODY_ARTIFACTS", ROOT / "artifacts"))
         gp = base / "b1_e5_v01/groups.json"
         cache = base / "modern_large_dev01"
         cfg = read_json(cache / "manifest.json")
@@ -85,6 +85,10 @@ def create_app(factory=Pipeline):
     app.add_middleware(CORSMiddleware, allow_origins=[v.strip() for v in os.getenv(
         "FEELODY_WEB_ORIGINS", "").split(",") if v.strip()], allow_methods=["POST"],
         allow_headers=["Content-Type"])
+
+    @app.get("/healthz")
+    def health():
+        return {"status": "ready", "retriever": E5, "reranker": RR, "candidates": 30, "top": 3}
 
     @app.get("/config.json")
     def config():

@@ -40,3 +40,5 @@ node_modules/
 !web/cases.json
 !vercel.json
 !reports/top3_pilot.json
+.modal-client/
+.feelody-model-env/

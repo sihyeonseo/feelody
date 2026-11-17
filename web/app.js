@@ -24,14 +24,14 @@ function choose(m,isManual){
  $('suggestion').textContent=manual?'선택한 기분':picked?'일기 표현에서 제안했어요. 바꿔도 좋아요.':'가장 가까운 기분을 골라 주세요.';
 }
 function viewSongs(r){
- const ok=r&&Array.isArray(r.songs)&&r.songs.length===3;$('music').hidden=!ok;$('cards').replaceChildren();if(!ok)return;
- $('source').textContent=r.source==='model'?'일기와 가사를 비교한 모델 추천':'기분별 선곡 · '+MOODS[r.mood].name+'에 준비한 세 곡';
+ const ok=r&&r.source==='model'&&Array.isArray(r.songs)&&r.songs.length===3;$('music').hidden=!ok;$('cards').replaceChildren();if(!ok)return;
+ $('source').textContent='일기와 가사를 비교한 모델 추천';
  for(const [i,s] of r.songs.entries()){
   const a=node('a','track'),u=new URL('https://www.youtube.com/results');u.searchParams.set('search_query',s.artist+' '+s.title+' 공식 음악');a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';a.setAttribute('aria-label',s.artist+' '+s.title+' YouTube 검색, 새 탭');
   a.append(disc(),node('small','','TRACK 0'+(i+1)),node('b','',s.title),node('span','',s.artist),node('u','','YouTube에서 찾기 ↗'));$('cards').append(a);
  }
 }
-function note(){if(active)$('modeNote').textContent=!ready?'추천 설정 확인 중…':api?'저장하면 입력한 일기를 모델 서버로 보내 세 곡을 찾습니다.':'현재는 선택한 기분에 준비된 세 곡을 보여줘요. 일기는 이 브라우저에만 저장됩니다.'}
+function note(){$('save').textContent=api?'저장하고 세 곡 추천받기 ↗':'일기 저장';if(active)$('modeNote').textContent=!ready?'추천 설정 확인 중…':api?'저장하면 입력한 일기를 모델 서버로 보내 세 곡을 찾습니다.':'모델 서버가 연결되지 않아 지금은 일기만 저장할 수 있어요.'}
 function openDay(day){
  active=day;dirty=false;const r=read(day),[y,m,d]=day.split('-').map(Number);$('home').hidden=true;$('editor').hidden=false;
  $('dayTitle').textContent=m+'월 '+d+'일 '+['일','월','화','수','목','금','토'][new Date(y,m-1,d).getDay()]+'요일';$('diary').value=r?.text||'';$('message').textContent='';choose(r?.mood||null,!!r);$('remove').hidden=!r;viewSongs(r);note();$('dayTitle').focus();
@@ -54,10 +54,10 @@ $('save').onclick=async()=>{
  const day=active,text=$('diary').value.trim(),m=picked;if(!day||busy||!ready)return;
  if(!text){$('message').textContent='일기를 한 줄 이상 적어 주세요.';$('diary').focus();return}
  if(!m){$('message').textContent='달력에 남길 기분을 골라 주세요.';$('moods').firstChild.focus();return}
- const r={text,mood:m,source:api?'model':'mood',songs:[]};
- if(!api)r.songs=MOODS[m].songs.map(([title,artist])=>({title,artist}));
+ const r={text,mood:m,source:api?'model':'none',songs:[]};
+ const old=read(day);if(old?.source==='model'&&old.text===text&&Array.isArray(old.songs)&&old.songs.length===3){r.source='model';r.songs=old.songs}
  if(!write(day,r))return;dirty=false;$('remove').hidden=false;viewSongs(r);
- if(!api){$('message').textContent='기록을 저장했어요.';return}
+ if(!api){$('message').textContent='일기를 저장했어요. 새 모델 추천은 생성되지 않았습니다.';return}
  const ctrl=new AbortController();busy=ctrl;$('save').disabled=true;$('message').textContent='일기를 저장했어요. 어울리는 세 곡을 찾고 있어요…';
  const timer=setTimeout(()=>ctrl.abort(),120000);
  try{const resp=await fetch(api+'/recommend',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({diary:text}),signal:ctrl.signal});if(!resp.ok)throw Error();
