@@ -1,0 +1,38 @@
+{
+  "catalog_groups": 2242,
+  "n_diaries": 10,
+  "k": 30,
+  "recommendations": 3,
+  "human_grade_threshold": 2,
+  "hits": {
+    "search": 4,
+    "rerank": 10
+  },
+  "slots": 30,
+  "adlibs": {
+    "affected_groups": 90,
+    "identical_ordered_top3": 10
+  },
+  "hubness": {
+    "raw_unique_at_30": 117,
+    "corrected_unique_at_30": 200,
+    "raw_top10_slots": 81,
+    "corrected_top10_slots": 51,
+    "slots": 300,
+    "raw_known_positive_hits": 20,
+    "corrected_known_positive_hits": 19
+  },
+  "case039": {
+    "human_judged_top30_grade_counts": [
+      27,
+      1,
+      1,
+      1
+    ],
+    "known_positive_raw_ranks": [
+      19,
+      22
+    ],
+    "kure_top3_human_hits": 0
+  }
+}

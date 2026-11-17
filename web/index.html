@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#183e36"><title>Feelody · 오늘의 일기, 세 곡</title><link rel="stylesheet" href="./style.css"><script src="./app.js" defer></script></head>
+<body><header><b><i aria-hidden="true">♪</i> Feelody</b><a href="https://github.com/sihyeonseo/feelody">GitHub ↗</a></header>
+<main><div class="intro"><small>FEELING × MELODY</small><h1>오늘의 일기,<br>세 곡의 플레이리스트<span>.</span></h1><p>하루의 사건보다 그때의 마음을 따라, 가사에서 닮은 노래를 찾습니다.</p></div>
+<div class="layout"><section class="panel"><small>01　/　DIARY</small><h2>일기 선택</h2><div class="switch"><button id="sample" aria-pressed="true">실험 예시</button><button id="live" aria-pressed="false">내 일기</button></div>
+<div id="samples"><label for="cases">기록의 주제</label><select id="cases"></select><p>개인 일기 대신 주제만 공개합니다. 오른쪽 결과는 해당 원문으로 미리 계산했습니다.</p></div>
+<form id="entry" hidden><label for="diary">오늘 느낀 마음</label><textarea id="diary" rows="5" required maxlength="4000" placeholder="오늘은 어떤 하루였나요?"></textarea><p id="hint"></p><button id="submit" class="primary">세 곡 찾기</button></form></section>
+<section class="panel record"><small>02　/　TRACKLIST</small><h2 id="title">추천 플레이리스트</h2><div id="methods" class="switch"><button id="rerank" aria-pressed="true">재순위화</button><button id="search" aria-pressed="false">검색만</button></div><p id="status" role="status"></p><ol id="tracks"></ol></section></div>
+<footer><strong>Feelody Research</strong><span>E5-large 검색 · KURE-nano 재순위화</span></footer></main></body></html>
