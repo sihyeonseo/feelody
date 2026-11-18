@@ -28,13 +28,13 @@ function choose(m,isManual){
 }
 function viewSongs(r){
  const ok=r&&['model','random'].includes(r.source)&&Array.isArray(r.songs)&&r.songs.length===3;$('music').hidden=!ok;$('cards').replaceChildren();if(!ok)return;
- $('source').textContent=r.source==='random'?'랜덤 선곡 · 일기 감정 분석 없이 골랐어요':'일기와 가사를 비교한 모델 추천';
+ $('source').textContent=r.source==='random'?'오늘의 추천곡':'일기와 가사를 비교한 모델 추천';
  for(const [i,s] of r.songs.entries()){
   const a=node('a','track'),u=new URL('https://www.youtube.com/results');u.searchParams.set('search_query',s.artist+' '+s.title+' 공식 음악');a.href=u.href;a.target='_blank';a.rel='noopener noreferrer';a.setAttribute('aria-label',s.artist+' '+s.title+' YouTube 검색, 새 탭');
   a.append(disc(),node('small','','TRACK 0'+(i+1)),node('b','',s.title),node('span','',s.artist),node('u','','YouTube에서 찾기 ↗'));if(s.reason)a.append(node('p','reason','AI가 읽은 감정 · '+s.reason));$('cards').append(a);
  }
 }
-function note(){$('save').textContent=api?'저장하고 세 곡 추천받기 ↗':'저장하고 랜덤 3곡 듣기 ↗';if(active)$('modeNote').textContent=!ready?'추천 설정 확인 중…':api?'저장하면 입력한 일기를 모델 서버로 보내 세 곡을 찾습니다.':'모델 서버 없이 랜덤으로 세 곡을 골라드려요. 일기는 이 브라우저에 저장돼요.'}
+function note(){$('save').textContent=api?'저장하고 세 곡 추천받기 ↗':'저장하고 세 곡 추천받기 ↗';if(active)$('modeNote').textContent=!ready?'추천 설정 확인 중…':api?'저장하면 입력한 일기를 모델 서버로 보내 세 곡을 찾습니다.':'현재는 일기 분석 없이 등록된 곡 목록에서 세 곡을 골라드려요.'}
 function openDay(day){
  active=day;dirty=false;$('explain').checked=false;const r=read(day),[y,m,d]=day.split('-').map(Number);$('home').hidden=true;$('editor').hidden=false;
  $('dayTitle').textContent=m+'월 '+d+'일 '+['일','월','화','수','목','금','토'][new Date(y,m-1,d).getDay()]+'요일';$('diary').value=r?.text||'';$('message').textContent='';choose(r?.mood||null,!!r);$('remove').hidden=!r;if(r?.text&&(!Array.isArray(r.songs)||r.songs.length!==3)){r.source='random';r.songs=randomSongs();write(day,r)}viewSongs(r);note();$('dayTitle').focus();
@@ -60,7 +60,7 @@ $('save').onclick=async()=>{
  const r={text,mood:m,source:'random',songs:randomSongs()};
  const old=read(day);if(old?.source==='model'&&old.text===text&&Array.isArray(old.songs)&&old.songs.length===3){r.source='model';r.songs=old.songs}
  if(!write(day,r))return;dirty=false;$('remove').hidden=false;viewSongs(r);
- if(!api){$('message').textContent=r.source==='model'?'일기와 기존 모델 추천 세 곡을 저장했어요.':'일기와 랜덤 세 곡을 저장했어요.';return}
+ if(!api){$('message').textContent=r.source==='model'?'일기와 기존 모델 추천 세 곡을 저장했어요.':'일기와 추천곡 세 곡을 저장했어요.';return}
  const ctrl=new AbortController();busy=ctrl;$('save').disabled=true;$('message').textContent='일기를 저장했어요. 어울리는 세 곡을 찾고 있어요…';
  const timer=setTimeout(()=>ctrl.abort(),300000);
  const show=(songs,terminal,reasonState)=>{
@@ -86,7 +86,7 @@ $('save').onclick=async()=>{
    await new Promise(ok=>setTimeout(ok,1000));
   }
  }
- catch(e){if(busy===ctrl&&!dirty&&active===day)$('message').textContent=r.source==='random'?'모델 추천을 받지 못해 랜덤 세 곡을 보여드려요. 일기는 저장됐어요.':'저장된 모델 추천 세 곡을 표시했어요. 새 요청의 완료를 확인하지 못했어요.'}
+ catch(e){if(busy===ctrl&&!dirty&&active===day)$('message').textContent=r.source==='random'?'일기는 저장됐어요. 이번에는 등록된 목록에서 고른 추천곡을 보여드려요.':'저장된 모델 추천 세 곡을 표시했어요. 새 요청의 완료를 확인하지 못했어요.'}
  finally{clearTimeout(timer);if(busy===ctrl){busy=null;$('save').disabled=false}}
 };
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});

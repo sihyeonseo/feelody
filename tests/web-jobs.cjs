@@ -20,7 +20,7 @@ async function run(fail,offline=false){
  await els.save.onclick();
  if(!offline)assert.equal(JSON.parse(requests.find(([url])=>url.endsWith('/jobs'))[1].body).explain,true);
  const entry=JSON.parse([...store.values()][0]);assert.equal(entry.text,els.diary.value);
- if(fail||offline){assert.match(els.source.textContent,/랜덤/);assert.equal(entry.source,'random');assert.equal(new Set(entry.songs.map(s=>s.title+s.artist)).size,3);assert.equal(els.cards.children.length,3);els.write.onclick();assert.equal(JSON.parse([...store.values()][0]).songs[0].title,entry.songs[0].title)}
+ if(fail||offline){assert.match(els.source.textContent,/오늘의 추천곡/);assert.equal(entry.source,'random');assert.equal(new Set(entry.songs.map(s=>s.title+s.artist)).size,3);assert.equal(els.cards.children.length,3);els.write.onclick();assert.equal(JSON.parse([...store.values()][0]).songs[0].title,entry.songs[0].title)}
  else{assert.equal(entry.songs.length,3);assert.equal(entry.songs[0].reason,songs[0].reason);assert.equal(els.cards.children.length,3);assert.ok(!JSON.stringify(entry).includes('secret'))}
 }
 (async()=>{await run(false);await run(true);await run(false,true);console.log('Calendar job success and queue-full flows OK')})().catch(e=>{console.error(e);process.exitCode=1})
