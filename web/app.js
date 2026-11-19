@@ -35,21 +35,21 @@ function viewSongs(r){
  $('empathy').textContent=hasReflection?r.empathy:'';
 
  const ok=r&&['model','random','llm'].includes(r.source)&&Array.isArray(r.songs)&&r.songs.length===3;$('music').hidden=!ok;$('cards').replaceChildren();if(!ok)return;
- $('source').textContent=r.source==='llm'?'AI가 일기를 읽고 고른 세 곡 · 곡명과 이유는 부정확할 수 있어요':r.source==='random'?'오늘의 추천곡':'일기와 가사를 비교한 모델 추천';
+ $('source').textContent=r.source==='llm'?'일기의 마음에 어울리는 세 곡 · 곡 정보와 추천 이유는 부정확할 수 있어요':r.source==='random'?'오늘의 추천곡':'일기와 가사를 비교해 고른 세 곡';
   if(r.source==='llm'&&r.generated_at&&!Number.isNaN(Date.parse(r.generated_at))){
   $('source').textContent+=' · '+new Date(r.generated_at).toLocaleTimeString('ko-KR')+' 생성';
  }
  for(const [i,s] of r.songs.entries()){
   const a=node('a','track'),u=new URL('https://www.youtube.com/results');u.searchParams.set('search_query',s.artist+' '+s.title+' 공식 음악');
   try{const provided=new URL(s.youtube_url);if(provided.origin==='https://www.youtube.com'&&provided.pathname==='/results'&&provided.searchParams.get('search_query')===u.searchParams.get('search_query'))a.href=provided.href;else a.href=u.href}catch{a.href=u.href}a.target='_blank';a.rel='noopener noreferrer';a.setAttribute('aria-label',s.artist+' '+s.title+' YouTube 검색, 새 탭');
-  a.append(disc(),node('small','','TRACK 0'+(i+1)),node('b','',s.title),node('span','',s.artist),node('u','','YouTube에서 찾기 ↗'));if(s.reason)a.append(node('p','reason','AI가 읽은 감정 · '+s.reason));$('cards').append(a);
+  a.append(disc(),node('small','','TRACK 0'+(i+1)),node('b','',s.title),node('span','',s.artist),node('u','','YouTube에서 찾기 ↗'));if(s.reason)a.append(node('p','reason','추천 이유 · '+s.reason));$('cards').append(a);
  }
 }
 function note(){
- $('save').textContent=llmMode?'저장하고 AI 추천받기 ↗':'저장하고 세 곡 추천받기 ↗';
+ $('save').textContent='추천받기';
  if(active)$('modeNote').textContent=!ready?'추천 설정 확인 중…':llmMode?
-  (llmConfigured?'AI 추천을 누르면 일기와 선택한 기분이 '+(provider==='gemini'?'Google Gemini':'OpenAI')+'에 전달돼요. 요약과 공감, 세 곡의 추천 이유를 함께 받아요.':llmMessage||'AI 추천 설정을 확인하지 못했어요. 일기는 저장할 수 있어요.'):
-  api?'저장하면 입력한 일기를 모델 서버로 보내 세 곡을 찾습니다.':'현재는 일기 분석 없이 등록된 곡 목록에서 세 곡을 골라드려요.';
+  (llmConfigured?'추천받기를 누르면 일기가 이 브라우저에 저장되고, 일기와 선택한 기분이 '+(provider==='gemini'?'Google Gemini':'OpenAI')+'에 전달돼요. 요약과 공감, 세 곡의 추천 이유를 함께 받아요.':llmMessage||'추천 서비스에 연결하지 못했어요. 추천받기를 누르면 일기는 이 브라우저에 저장돼요.'):
+  api?'추천받기를 누르면 일기가 이 브라우저에 저장되고, 추천 서버로 전송돼 어울리는 세 곡을 찾아요.':'현재는 일기 분석 없이 등록된 곡 목록에서 세 곡을 골라드려요.';
 }
 function openDay(day){
  active=day;dirty=false;$('explain').checked=false;const r=read(day),[y,m,d]=day.split('-').map(Number);$('home').hidden=true;$('editor').hidden=false;
@@ -88,7 +88,7 @@ function startWait(ctrl,day){
   '최근 '+samples.length+'회는 '+Math.min(...samples)+'~'+Math.max(...samples)+'초 걸렸어요. 이번에는 달라질 수 있어요.';
  const tick=()=>{if(busy!==ctrl||active!==day||ctrl.signal.aborted)return;
   $('waitElapsed').textContent=Math.floor(elapsed())+'초 경과';
-  $('waitTitle').textContent=elapsed()>=30?'응답이 조금 늦어지고 있어요':'AI의 답장을 기다리고 있어요';
+  $('waitTitle').textContent=elapsed()>=30?'노래 추천이 조금 늦어지고 있어요':'노래를 추천받는 중이에요';
  };
  tick();
  const interval=setInterval(tick,1000);
@@ -103,21 +103,21 @@ async function saveWithLLM(day,text,mood,excluded=[]){
  dirty=false;$('remove').hidden=false;viewSongs(r);
  const ctrl=new AbortController();busy=ctrl;$('save').disabled=true;
  const waiting=startWait(ctrl,day);
- $('message').textContent='일기를 저장했어요. AI가 마음을 읽고 세 곡을 고르고 있어요…';
+ $('message').textContent='일기를 저장했어요. 오늘의 마음에 어울리는 세 곡을 고르고 있어요…';
  const timer=setTimeout(()=>ctrl.abort(),55000);
  try{
   const resp=await fetch('/api/recommend',{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json'},
    body:JSON.stringify({diary:text,mood,excluded_songs:excluded}),signal:ctrl.signal});
   const data=await resp.json();
-  if(!resp.ok)throw Error(typeof data.message==='string'?data.message:'AI 추천을 받지 못했어요.');
+  if(!resp.ok)throw Error(typeof data.message==='string'?data.message:'추천곡을 받지 못했어요.');
   if(data.source!=='llm'||typeof data.summary!=='string'||typeof data.empathy!=='string'||
-   !Array.isArray(data.songs)||data.songs.length!==3||data.songs.some(s=>['title','artist','reason'].some(k=>typeof s?.[k]!=='string')))throw Error('AI 응답을 확인하지 못했어요.');
+   !Array.isArray(data.songs)||data.songs.length!==3||data.songs.some(s=>['title','artist','reason'].some(k=>typeof s?.[k]!=='string')))throw Error('추천 결과를 확인하지 못했어요.');
   if(busy!==ctrl||dirty||active!==day||ctrl.signal.aborted)return;
   rememberWait(data.timing_key||llmTimingKey,waiting.elapsed());
   Object.assign(r,{source:'llm',summary:data.summary,empathy:data.empathy,
    request_id:data.request_id,generated_at:data.generated_at,
    songs:data.songs.map(({title,artist,reason,youtube_url})=>({title,artist,reason,youtube_url}))});
-  if(write(day,r)){viewSongs(r);$('message').textContent='일기와 AI의 답장, 추천곡을 저장했어요. · '+waiting.elapsed().toFixed(1)+'초 소요'}
+  if(write(day,r)){viewSongs(r);$('message').textContent='일기와 마음 기록, 추천곡을 저장했어요. · '+waiting.elapsed().toFixed(1)+'초 소요'}
  }catch(e){if(busy===ctrl&&!dirty&&active===day)$('message').textContent='일기는 저장됐어요. '+(e.name==='AbortError'?'응답이 늦어져 중단했어요. 잠시 후 다시 시도해 주세요.':e.message)}
  finally{waiting.stop();clearTimeout(timer);if(busy===ctrl){busy=null;$('save').disabled=false}}
 }
@@ -134,7 +134,7 @@ $('save').onclick=async()=>{
  const r={text,mood:m,source:'random',songs:randomSongs()};
  const old=read(day);if(old?.source==='model'&&old.text===text&&Array.isArray(old.songs)&&old.songs.length===3){r.source='model';r.songs=old.songs}
  if(!write(day,r))return;dirty=false;$('remove').hidden=false;viewSongs(r);
- if(!api){$('message').textContent=r.source==='model'?'일기와 기존 모델 추천 세 곡을 저장했어요.':'일기와 추천곡 세 곡을 저장했어요.';return}
+ if(!api){$('message').textContent=r.source==='model'?'일기와 기존 추천곡 세 곡을 저장했어요.':'일기와 추천곡 세 곡을 저장했어요.';return}
  const ctrl=new AbortController();busy=ctrl;$('save').disabled=true;$('message').textContent='일기를 저장했어요. 어울리는 세 곡을 찾고 있어요…';
  const timer=setTimeout(()=>ctrl.abort(),300000);
  const show=(songs,terminal,reasonState)=>{
@@ -160,7 +160,7 @@ $('save').onclick=async()=>{
    await new Promise(ok=>setTimeout(ok,1000));
   }
  }
- catch(e){if(busy===ctrl&&!dirty&&active===day)$('message').textContent=r.source==='random'?'일기는 저장됐어요. 이번에는 등록된 목록에서 고른 추천곡을 보여드려요.':'저장된 모델 추천 세 곡을 표시했어요. 새 요청의 완료를 확인하지 못했어요.'}
+ catch(e){if(busy===ctrl&&!dirty&&active===day)$('message').textContent=r.source==='random'?'일기는 저장됐어요. 이번에는 등록된 목록에서 고른 추천곡을 보여드려요.':'저장된 추천곡 세 곡을 표시했어요. 새 요청의 완료를 확인하지 못했어요.'}
  finally{clearTimeout(timer);if(busy===ctrl){busy=null;$('save').disabled=false}}
 };
 window.addEventListener('beforeunload',e=>{if(dirty){e.preventDefault();e.returnValue=''}});

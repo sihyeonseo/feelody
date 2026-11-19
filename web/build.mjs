@@ -4,5 +4,5 @@ const url=mode==='local'?(process.env.FEELODY_API_ORIGIN||'').trim():'';
 if(url && (!/^https:\/\//.test(url)||new URL(url).origin!==url)) throw Error('FEELODY_API_ORIGIN must be an HTTPS origin without a trailing slash');
 await rm('dist',{recursive:true,force:true});
 await mkdir('dist');
-for(const f of ['index.html','app.js','style.css','cases.json','research.html','research.css','research.js','moods.js']) await copyFile('web/'+f,'dist/'+f);
+for(const f of ['index.html','app.js','style.css','cases.json','research.html','research.css','research.js','moods.js','ads.txt']) await copyFile('web/'+f,'dist/'+f);
 await writeFile('dist/config.json',JSON.stringify({mode,apiOrigin:url}));

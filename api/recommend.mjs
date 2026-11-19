@@ -63,14 +63,14 @@ export default async function handler(req,res){
  const timingKey=[cfg.name,cfg.model,cfg.effort||'default','v2'].join(':');
  const ready=!!(cfg.enabled&&cfg.key&&cfg.url&&cfg.model);
  if(req.method==='GET')return res.status(200).json({mode:'llm',configured:ready,provider:cfg.name,timing_key:timingKey,
-  message:ready?'':!cfg.enabled?'AI 추천이 잠시 중지돼 있어요.':'Vercel에서 API 키와 모델 설정을 확인해 주세요.'});
+  message:ready?'':!cfg.enabled?'추천 서비스가 잠시 쉬고 있어요.':'추천 서비스 준비 중이에요. 잠시 후 다시 이용해 주세요.'});
  if(req.method!=='POST'){res.setHeader('Allow','GET, POST');return res.status(405).json({message:'지원하지 않는 요청입니다.'})}
  // A browser must call this same-origin function. This is not authentication.
  if(req.headers.origin){
   try{if(new URL(req.headers.origin).host!==req.headers.host)return res.status(403).json({message:'사이트에서 다시 요청해 주세요.'})}
   catch{return res.status(403).json({message:'잘못된 요청입니다.'})}
  }
- if(!ready)return res.status(503).json({message:!cfg.enabled?'AI 추천이 잠시 중지돼 있어요.':'API 키와 모델 설정이 아직 완료되지 않았어요.'});
+ if(!ready)return res.status(503).json({message:!cfg.enabled?'추천 서비스가 잠시 쉬고 있어요.':'추천 서비스 준비 중이에요. 잠시 후 다시 이용해 주세요.'});
  const media=String(req.headers['content-type']||'');
  if(!media.toLowerCase().startsWith('application/json'))return res.status(415).json({message:'JSON 요청이 필요합니다.'});
  let body;
@@ -101,16 +101,16 @@ export default async function handler(req,res){
   const upstream=await fetch(cfg.url,{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+cfg.key},
    body:JSON.stringify(payload),signal:AbortSignal.timeout(45000)});
   if(!upstream.ok){
-   const message=[401,403,404].includes(upstream.status)?'API 키 권한 또는 모델 이름을 확인해 주세요.':
-    upstream.status===429?'AI 제공사의 이용 한도에 도달했어요. 잠시 후 다시 시도해 주세요.':'AI 서비스에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.';
+   const message=[401,403,404].includes(upstream.status)?'추천 서비스 설정을 확인하고 있어요. 잠시 후 다시 이용해 주세요.':
+    upstream.status===429?'추천 서비스의 이용 한도에 도달했어요. 잠시 후 다시 시도해 주세요.':'추천 서비스에 연결하지 못했어요. 잠시 후 다시 시도해 주세요.';
    return res.status(upstream.status===429?429:502).json({message,code:'PROVIDER_ERROR',provider_status:upstream.status,request_id:requestId});
   }
   const result=await upstream.json(),choice=result.choices?.[0];
   if(choice?.finish_reason!=='stop'||choice?.message?.refusal)throw Error('Incomplete answer');
   const parsed=normalize(JSON.parse(choice.message.content));
-  if(parsed.songs.some(s=>excluded.some(x=>songKey(s)===songKey(x))))return res.status(502).json({message:'AI가 이전 곡을 다시 골랐어요. 다른 세 곡을 받으려면 다시 시도해 주세요.',code:'REPEATED_SELECTION',request_id:requestId});
+  if(parsed.songs.some(s=>excluded.some(x=>songKey(s)===songKey(x))))return res.status(502).json({message:'이전과 같은 곡이 포함됐어요. 다른 세 곡을 받으려면 다시 시도해 주세요.',code:'REPEATED_SELECTION',request_id:requestId});
   return res.status(200).json({...parsed,request_id:requestId,generated_at:new Date().toISOString(),timing_key:timingKey,timing:{provider_ms:Math.round(performance.now()-providerStarted),server_ms:Math.round(performance.now()-started)}});
  }catch(err){
-  return res.status(err?.name==='TimeoutError'?504:502).json({message:err?.name==='TimeoutError'?'AI 응답이 늦어지고 있어요. 일기는 저장됐으니 잠시 후 다시 시도해 주세요.':'AI 응답을 완성하지 못했어요. 잠시 후 다시 시도해 주세요.'});
+  return res.status(err?.name==='TimeoutError'?504:502).json({message:err?.name==='TimeoutError'?'추천이 늦어지고 있어요. 일기는 저장됐으니 잠시 후 다시 시도해 주세요.':'추천을 완료하지 못했어요. 잠시 후 다시 시도해 주세요.'});
  }finally{inFlight--}
 }
