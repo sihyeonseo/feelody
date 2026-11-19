@@ -48,7 +48,7 @@ function viewSongs(r){
 function note(){
  $('save').textContent='추천받기';
  if(active)$('modeNote').textContent=!ready?'추천 설정 확인 중…':llmMode?
-  (llmConfigured?'추천받기를 누르면 일기가 이 브라우저에 저장되고, 일기와 선택한 기분이 '+(provider==='gemini'?'Google Gemini':'OpenAI')+'에 전달돼요. 요약과 공감, 세 곡의 추천 이유를 함께 받아요.':llmMessage||'추천 서비스에 연결하지 못했어요. 추천받기를 누르면 일기는 이 브라우저에 저장돼요.'):
+  (llmConfigured?'추천받기를 누르면 일기가 이 브라우저에 저장돼요. 일기와 기분을 추천 서비스로 보내 오늘의 마음에 어울리는 세 곡을 찾아요.':llmMessage||'추천 서비스에 연결하지 못했어요. 추천받기를 누르면 일기는 이 브라우저에 저장돼요.'):
   api?'추천받기를 누르면 일기가 이 브라우저에 저장되고, 추천 서버로 전송돼 어울리는 세 곡을 찾아요.':'현재는 일기 분석 없이 등록된 곡 목록에서 세 곡을 골라드려요.';
 }
 function openDay(day){
