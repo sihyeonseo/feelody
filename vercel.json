@@ -1,1 +1,11 @@
-{"framework":null,"installCommand":"node --version","buildCommand":"node web/build.mjs","outputDirectory":"dist"}
+{
+  "framework": null,
+  "installCommand": "node --version",
+  "buildCommand": "node web/build.mjs",
+  "outputDirectory": "dist",
+  "functions": {
+    "api/recommend.mjs": {
+      "maxDuration": 60
+    }
+  }
+}

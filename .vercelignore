@@ -2,3 +2,5 @@
 !vercel.json
 !web/
 !web/**
+!api/
+!api/**

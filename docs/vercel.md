@@ -1,3 +1,5 @@
+> **현재 웹 기본 경로는 LLM API 전용입니다.** [API 키 설정과 재배포 안내](llm-web.md)를 먼저 읽으세요. 아래는 기존 로컬 모델 연결 기록이며 FEELODY_WEB_MODE=local일 때 사용합니다.
+
 # Vercel에서 체험하기
 
 1. Vercel → Add New → Project에서 GitHub의 `sihyeonseo/feelody`를 Import한다.
