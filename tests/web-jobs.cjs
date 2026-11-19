@@ -7,7 +7,7 @@ async function run(fail,offline=false){
  const songs=[1,2,3].map(i=>({title:'곡'+i,artist:'가수',reason:'감정을 읽은 설명'}));
  const fetch=async(url,opts={})=>{
   requests.push([url,opts]);let data,code=200;
-  if(url.endsWith('config.json'))data={apiOrigin:offline?'':'.'};
+  if(url.endsWith('config.json'))data={mode:'local',apiOrigin:offline?'':'.'};
   else if(url.endsWith('/healthz'))data={jobs:true,explanation_provider:'gemini'};
   else if(url.endsWith('/jobs')){data={job_id:'abc',access_token:'secret'};code=fail?429:202}
   else {assert.equal(opts.headers.Authorization,'Bearer secret');data=++polls===1?{status:'queued'}:{status:'succeeded',songs,explanation_status:'generated'}}
