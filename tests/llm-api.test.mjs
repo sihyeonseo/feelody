@@ -14,7 +14,7 @@ test('Vercel LLM handler contracts without real provider calls',async()=>{
  const saved={...process.env},fetchOriginal=globalThis.fetch;let calls=[];
  try{
   delete process.env.OPENAI_API_KEY;delete process.env.GEMINI_API_KEY;delete process.env.FEELODY_LLM_MODEL;
-  delete process.env.FEELODY_LLM_PROVIDER;delete process.env.FEELODY_LLM_ENABLED;
+  delete process.env.FEELODY_LLM_REASONING_EFFORT;delete process.env.FEELODY_LLM_PROVIDER;delete process.env.FEELODY_LLM_ENABLED;
   globalThis.fetch=async(url,opts)=>{calls.push({url,opts});return {ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify(fixture)}}]})}};
   assert.equal((await call(req(null,'GET'))).value.configured,false);
   assert.equal((await call(req())).code,503);assert.equal(calls.length,0);
@@ -22,7 +22,7 @@ test('Vercel LLM handler contracts without real provider calls',async()=>{
   assert.equal(providerConfig().model,'gpt-4.1-mini');
   const status=await call(req(null,'GET'));assert.equal(status.value.configured,true);assert.equal(calls.length,0);
   const result=await call(req());assert.equal(result.code,200);assert.equal(result.headers['Cache-Control'],'no-store');
-  assert.equal(result.value.songs.length,3);assert.equal(result.value.summary,fixture.summary);
+  assert.equal(result.value.songs.length,3);assert.ok(result.value.timing.provider_ms>=0);assert.ok(result.value.timing.server_ms>=result.value.timing.provider_ms);assert.ok(result.value.timing_key.includes('gpt-4.1-mini'));assert.equal(result.value.summary,fixture.summary);
   assert.equal(new URL(result.value.songs[0].youtube_url).hostname,'www.youtube.com');
   assert.ok(!JSON.stringify(result.value).includes('test-secret'));
   assert.equal(JSON.parse(calls[0].opts.body).store,false);
@@ -40,8 +40,8 @@ test('Vercel LLM handler contracts without real provider calls',async()=>{
   assert.equal((await call(req())).code,504);
   process.env.FEELODY_LLM_PROVIDER='gemini';process.env.GEMINI_API_KEY='another-fixture-key';
   assert.equal((await call(req())).code,503); // requires explicit model instead of outdated defaults
-  process.env.FEELODY_LLM_MODEL='fixture-gemini';
-  globalThis.fetch=async(url,opts)=>{assert.ok(url.startsWith('https://generativelanguage.googleapis.com/'));assert.equal(JSON.parse(opts.body).model,'fixture-gemini');return {ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify(fixture)}}]})}};
+  process.env.FEELODY_LLM_MODEL='fixture-gemini';process.env.FEELODY_LLM_REASONING_EFFORT='medium';
+  globalThis.fetch=async(url,opts)=>{assert.ok(url.startsWith('https://generativelanguage.googleapis.com/'));assert.equal(JSON.parse(opts.body).model,'fixture-gemini');assert.equal(JSON.parse(opts.body).reasoning_effort,'medium');return {ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify(fixture)}}]})}};
   assert.equal((await call(req())).code,200);
   const same=req();for(let i=0;i<5;i++)assert.equal((await call(same)).code,200);
   assert.equal((await call(same)).code,429);

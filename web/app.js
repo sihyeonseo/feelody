@@ -3,7 +3,7 @@ const $=id=>document.getElementById(id),node=(tag,cls,txt)=>{const e=document.cr
 const pad=n=>String(n).padStart(2,'0'),key=(y,m,d)=>y+'-'+pad(m+1)+'-'+pad(d);
 const today=()=>{const t=new Date();return key(t.getFullYear(),t.getMonth(),t.getDate())};
 const prefix='feelody/journal/v1/', labels=Object.keys(MOODS),hasMood=m=>Object.hasOwn(MOODS,m);
-let month=new Date();month.setDate(1);let active=null,picked=null,manual=false,dirty=false,api='',busy=null,ready=false,legacy=false,provider=null,llmMode=false,llmConfigured=false,llmMessage='';
+let month=new Date();month.setDate(1);let active=null,picked=null,manual=false,dirty=false,api='',busy=null,ready=false,legacy=false,provider=null,llmMode=false,llmConfigured=false,llmMessage='',llmTimingKey='';
 // Public sample catalog; random selection is not an emotion model result.
 const RANDOM_TRACKS=[{"title":"내일이 오면 (Feat. 기리보이, BIG Naughty (서동현))","artist":"릴보이 (lIlBOI)"},{"title":"N분의1 (Feat. 다이나믹듀오)","artist":"넉살, 한해, RYNO (라이노), 조우찬"},{"title":"구해주오","artist":"CB Mass"},{"title":"Ordinary People","artist":"SG 워너비"},{"title":"정이라고 하자 (Feat. 10CM)","artist":"BIG Naughty (서동현)"},{"title":"CREDIT (Feat. 염따, 기리보이, Zion.T)","artist":"릴보이 (lIlBOI)"},{"title":"The Time Goes On","artist":"BewhY (비와이)"},{"title":"환희","artist":"싸이 (PSY)"},{"title":"겁 (Feat. 태양)","artist":"MINO (송민호)"},{"title":"좋아보여 (Feat. 검정치마)","artist":"버벌진트"},{"title":"회상 (Feat. 백지영)","artist":"리쌍"},{"title":"EASY","artist":"LE SSERAFIM (르세라핌)"},{"title":"그리고 그후","artist":"프리스타일"},{"title":"기다렸다 가","artist":"다이나믹 듀오, 첸 (CHEN)"},{"title":"친구","artist":"방탄소년단"},{"title":"One Love","artist":"원타임"},{"title":"슬피 우는 새 (Feat. 이수영)","artist":"아웃사이더"},{"title":"Wash Away (Feat. 에일리)","artist":"긱스 (Geeks)"},{"title":"바코드 (Prod. GroovyRoom)","artist":"김하온 (HAON), 빈첸"},{"title":"남자기 때문에","artist":"드렁큰 타이거"},{"title":"죽일 놈 (Guilty)","artist":"다이나믹 듀오"},{"title":"연애소설 (Feat. 아이유)","artist":"에픽하이 (EPIK HIGH)"},{"title":"빌었어","artist":"창모 (CHANGMO)"},{"title":"곰인형 (Feat. 해금)","artist":"린"},{"title":"내 생애 가장 행복한 시간 (Feat. 허각)","artist":"MC몽"},{"title":"당신의 밤 (Feat. 오혁)","artist":"황광희 X 개코"},{"title":"시간을 찾아서 (Feat. 이적)","artist":"김진표"},{"title":"너에게 닿기를","artist":"10CM"},{"title":"180˚ (Feat. 인태 & Supasize)","artist":"MC몽"},{"title":"마이동풍","artist":"배치기"},{"title":"우연 (우울한 우연)","artist":"베이비 복스"},{"title":"끝","artist":"싸이 (PSY)"},{"title":"그땐 그땐 그땐","artist":"Supreme Team, 영준"},{"title":"A Real Man","artist":"스윙스, 에일리(Ailee)"},{"title":"Forever (Prod. By GRAY)","artist":"BewhY (비와이)"},{"title":"UPT Paradoxxx","artist":"업타운"},{"title":"스물셋","artist":"아이유"},{"title":"Memories... (Smiling Tears)","artist":"윤미래"},{"title":"flex (Prod. By 기리보이)","artist":"기리보이, 키드밀리 (Kid Milli), NO:EL, 스윙스"},{"title":"Summer Hate (Feat. 비)","artist":"지코 (ZICO)"},{"title":"Hot Summer","artist":"f(x)"},{"title":"치맛바람 (Chi Mat Ba Ram)","artist":"브레이브걸스"},{"title":"땡땡땡","artist":"Supreme Team"}];
 function randomSongs(){const pool=[...RANDOM_TRACKS];for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}return pool.slice(0,3).map(s=>({...s}))}
@@ -63,12 +63,40 @@ $('diary').oninput=()=>{edited();if(!manual){
 };
 $('remove').onclick=()=>{if(!window.confirm('이 날짜의 일기와 플레이리스트를 삭제할까요?'))return;
  try{localStorage.removeItem(prefix+active)}catch{$('message').textContent='기록을 삭제하지 못했습니다.';return}dirty=false;home()};
+function recentWaits(key){
+ if(!key)return [];
+ try{const value=JSON.parse(localStorage.getItem('feelody/timings/v1'));
+  return value?.key===key&&Array.isArray(value.samples)?value.samples.filter(x=>Number.isFinite(x.seconds)&&x.seconds>0&&x.seconds<60&&Date.now()-x.at<86400000).slice(-5):[];
+ }catch{return []}
+}
+function rememberWait(key,seconds){
+ if(!key||!Number.isFinite(seconds)||seconds<=0)return;
+ try{localStorage.setItem('feelody/timings/v1',JSON.stringify({key,samples:[...recentWaits(key),{seconds,at:Date.now()}].slice(-5)}))}catch{}
+}
+function startWait(ctrl,day){
+ const started=performance.now(),panel=$('waiting'),samples=recentWaits(llmTimingKey).map(x=>Math.ceil(x.seconds));
+ const elapsed=()=>Math.max(0,(performance.now()-started)/1000);
+ panel.hidden=false;
+ $('waitHistory').textContent=samples.length===0?'완료되면 요약과 세 곡을 함께 보여드려요.':
+  samples.length===1?'이전 추천은 약 '+samples[0]+'초 걸렸어요. 이번에는 달라질 수 있어요.':
+  '최근 '+samples.length+'회는 '+Math.min(...samples)+'~'+Math.max(...samples)+'초 걸렸어요. 이번에는 달라질 수 있어요.';
+ const tick=()=>{if(busy!==ctrl||active!==day||ctrl.signal.aborted)return;
+  $('waitElapsed').textContent=Math.floor(elapsed())+'초 경과';
+  $('waitTitle').textContent=elapsed()>=30?'응답이 조금 늦어지고 있어요':'AI의 답장을 기다리고 있어요';
+ };
+ tick();
+ const interval=setInterval(tick,1000);
+ const stop=()=>{clearInterval(interval);if(busy===ctrl)panel.hidden=true;ctrl.signal.removeEventListener('abort',stop)};
+ ctrl.signal.addEventListener('abort',stop,{once:true});
+ return {stop,elapsed};
+}
 async function saveWithLLM(day,text,mood){
  const previous=read(day);
  const r=previous?.text===text&&previous.source==='llm'?{...previous,mood}:{text,mood,source:'none',songs:[]};
  if(!write(day,r))return;
  dirty=false;$('remove').hidden=false;viewSongs(r);
  const ctrl=new AbortController();busy=ctrl;$('save').disabled=true;
+ const waiting=startWait(ctrl,day);
  $('message').textContent='일기를 저장했어요. AI가 마음을 읽고 세 곡을 고르고 있어요…';
  const timer=setTimeout(()=>ctrl.abort(),55000);
  try{
@@ -79,11 +107,12 @@ async function saveWithLLM(day,text,mood){
   if(data.source!=='llm'||typeof data.summary!=='string'||typeof data.empathy!=='string'||
    !Array.isArray(data.songs)||data.songs.length!==3||data.songs.some(s=>['title','artist','reason'].some(k=>typeof s?.[k]!=='string')))throw Error('AI 응답을 확인하지 못했어요.');
   if(busy!==ctrl||dirty||active!==day||ctrl.signal.aborted)return;
+  rememberWait(data.timing_key||llmTimingKey,waiting.elapsed());
   Object.assign(r,{source:'llm',summary:data.summary,empathy:data.empathy,
    songs:data.songs.map(({title,artist,reason})=>({title,artist,reason}))});
-  if(write(day,r)){viewSongs(r);$('message').textContent='일기와 AI의 답장, 추천곡을 저장했어요.'}
+  if(write(day,r)){viewSongs(r);$('message').textContent='일기와 AI의 답장, 추천곡을 저장했어요. · '+waiting.elapsed().toFixed(1)+'초 소요'}
  }catch(e){if(busy===ctrl&&!dirty&&active===day)$('message').textContent='일기는 저장됐어요. '+(e.name==='AbortError'?'응답이 늦어져 중단했어요. 잠시 후 다시 시도해 주세요.':e.message)}
- finally{clearTimeout(timer);if(busy===ctrl){busy=null;$('save').disabled=false}}
+ finally{waiting.stop();clearTimeout(timer);if(busy===ctrl){busy=null;$('save').disabled=false}}
 }
 $('save').onclick=async()=>{
  const day=active,text=$('diary').value.trim(),m=picked;if(!day||busy||!ready)return;
@@ -127,5 +156,5 @@ window.addEventListener('storage',e=>{if(!active && (!e.key||e.key.startsWith(pr
 $('save').disabled=true;calendar();
 (async()=>{try{const r=await fetch('./config.json');if(r.ok){const c=await r.json();api=typeof c.apiOrigin==='string'?c.apiOrigin:'';llmMode=c.mode==='llm'}}catch{}
  if(llmMode){
-  try{const r=await fetch('/api/recommend',{signal:AbortSignal.timeout(8000)});if(r.ok){const c=await r.json();llmConfigured=c.configured===true;provider=c.provider;llmMessage=c.message||''}}catch{}
+  try{const r=await fetch('/api/recommend',{signal:AbortSignal.timeout(8000)});if(r.ok){const c=await r.json();llmConfigured=c.configured===true;provider=c.provider;llmMessage=c.message||'';llmTimingKey=typeof c.timing_key==='string'?c.timing_key:''}}catch{}
  }else if(api){try{const r=await fetch(api+'/healthz',{signal:AbortSignal.timeout(8000)});if(r.ok){const h=await r.json();legacy=h.jobs!==true;provider=h.explanation_provider||null;if(provider){$('reasonProvider').textContent=provider;$('reasonOption').hidden=false}}}catch{}}ready=true;$('save').disabled=false;note()})();

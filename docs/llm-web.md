@@ -57,3 +57,12 @@ Gemini 모델 ID는 생략하지 않는다. 제공사의 모델 폐기·전환�
 위 검사는 외부 호출을 가짜 응답으로 대체한다. OpenAI/Gemini 요청 형식, 설정 누락, 잘못된 응답, 곡 중복, 제공사 오류, 한도/시간 초과, 노출 데이터, 화면 저장·복원·원문 편집을 검사한다. 실제 API 키를 이용한 유료 호출과 Vercel 원격 배포 검수는 별도다. 새 배포 후 /api/recommend의 configured:true를 확인한 다음 일기 한 편으로 실제 결과와 제공사 사용량을 확인한다. 사용자 계정의 키·모델 권한은 자동으로 검증한 것으로 주장하지 않는다.
 
 공식 자료: [Vercel Node.js Functions](https://vercel.com/docs/functions/runtimes/node-js), [환경변수](https://vercel.com/docs/environment-variables), [OpenAI JSON 출력](https://developers.openai.com/api/docs/guides/structured-outputs), [Gemini OpenAI 호환 API](https://ai.google.dev/gemini-api/docs/openai).
+
+
+## 기다리는 화면과 속도 확인
+
+추천 대기 중에는 실제 경과 초와 움직이는 음반 아이콘을 표시한다. 이 브라우저에서 같은 제공사·모델·추론 설정으로 최근 24시간 안에 성공한 요청이 있으면 최근 최대 5회의 실제 소요 범위도 표시한다. 첫 요청에는 임의 예상 시간을 만들지 않는다. 이 범위는 성공한 이전 요청의 관측값이며, 실패·시간 초과는 포함하지 않으므로 완료 보장이나 통계적 예측 구간이 아니다. 모델/추론 설정 변경 시 다른 기록을 섞지 않는다. 완료·실패·편집·화면 이동 시 타이머를 정리한다.
+
+API 성공 응답의 timing.provider_ms는 외부 제공사 호출부터 응답 해석까지, timing.server_ms는 핸들러 실행부터 결과까지의 시간이다. 브라우저는 별도로 제출→결과 확인 시간을 측정한다. 서버 시간이 짧고 브라우저 시간이 길면 네트워크·콜드 스타트 등 추가 구간을 살펴야 한다. provider_ms가 길어도 추론 자체와 제공사 대기를 분리해서 측정한 것은 아니다.
+
+Gemini에서 속도와 품질을 비교하려면 **FEELODY_LLM_REASONING_EFFORT=medium**을 추가하고 재배포할 수 있다. low/medium/high/xhigh 중 해당 모델이 지원하는 값을 사용한다. 생략하면 모델 기본 설정을 유지한다. 현재 코드는 이 값을 Gemini 요청에만 보낸다. Gemini 4 Hydrogen 기본 추론 수준은 high이며 공식 문서는 medium/low를 더 빠른 응답이 필요한 경우의 선택지로 설명한다. Feelody에서 속도 개선이나 품질 유지가 검증된 것은 아니므로 같은 일기들로 시간을 측정하고 추천 결과도 비교한다. [Google 추론 수준 안내](https://aistudio.google.com/docs/thinking#understanding-thinking-levels) · [OpenAI 호환 API 매핑](https://aistudio.google.com/docs/openai#thinking).
