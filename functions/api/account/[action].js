@@ -57,7 +57,7 @@ export async function handleAccount({request:req,env,params},adminHandler){
   if(!user?.id)return go('/admin/login');
   const role=await remote('/rest/v1/profiles?select=role&id=eq.'+encodeURIComponent(user.id),{headers:bearer()});
   if(!role.ok)return json({},503);
-  if((await role.json())[0]?.role!=='Admin')return new Response('Forbidden: administrator access required.',{status:403,headers});
+  if((await role.json())[0]?.role!=='Admin')return new Response('관리자 권한이 있는 계정만 접근할 수 있습니다.',{status:403,headers});
   return await adminHandler({headers,remote,bearer,go});
  }
  if(action==='session')return json({configured:true,user:user?.id||null,avatarUrl:user?.id?avatar(user):null});
