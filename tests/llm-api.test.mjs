@@ -1,16 +1,18 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import handler, {normalize,providerConfig} from '../api/recommend.mjs';
+import {onRequest,normalize,providerConfig} from '../functions/api/recommend.js';
 
 const fixture={summary:'작은 성취가 있었던 하루',empathy:'차근차근 해낸 자신을 격려해도 좋겠어요.',
  songs:[1,2,3].map(i=>({title:'노래'+i,artist:'가수',reason:'성취의 기쁨에 어울리는 곡이에요.',youtube_url:'https://bad.example/'}))};
 let seq=0;
 function req(body={diary:'기쁜 하루',mood:'joy'},method='POST'){
- return {method,body,headers:{'content-type':'application/json',host:'feelody.example',origin:'https://feelody.example','x-forwarded-for':'test-'+ ++seq}};
+ return {method,body,headers:{'content-type':'application/json',host:'feelody.example',origin:'https://feelody.example','CF-Connecting-IP':'test-'+ ++seq}};
 }
-function response(){return {headers:{},setHeader(k,v){this.headers[k]=v},status(n){this.code=n;return this},json(v){this.value=v;return this}}}
-async function call(r){const res=response();await handler(r,res);return res}
-test('Vercel LLM handler contracts without real provider calls',async()=>{
+async function call(r){
+ const request=new Request('https://feelody.example/api/recommend',{method:r.method,headers:r.headers,...(r.method==='POST'?{body:JSON.stringify(r.body)}:{})});
+ const res=await onRequest({request,env:process.env});return {code:res.status,headers:{'Cache-Control':res.headers.get('Cache-Control')},value:await res.json()};
+}
+test('Pages Function handler contracts without real provider calls',async()=>{
  const saved={...process.env},fetchOriginal=globalThis.fetch;let calls=[];
  try{
   delete process.env.OPENAI_API_KEY;delete process.env.GEMINI_API_KEY;delete process.env.FEELODY_LLM_MODEL;
@@ -19,7 +21,7 @@ test('Vercel LLM handler contracts without real provider calls',async()=>{
   assert.equal((await call(req(null,'GET'))).value.configured,false);
   assert.equal((await call(req())).code,503);assert.equal(calls.length,0);
   process.env.OPENAI_API_KEY='test-secret-do-not-publish';
-  assert.equal(providerConfig().model,'gpt-4.1-mini');
+  assert.equal(providerConfig(process.env).model,'gpt-4.1-mini');
   const status=await call(req(null,'GET'));assert.equal(status.value.configured,true);assert.equal(calls.length,0);
   const result=await call(req());assert.equal(result.code,200);assert.equal(result.headers['Cache-Control'],'no-store');
   assert.equal(result.value.songs.length,3);assert.ok(result.value.timing.provider_ms>=0);assert.ok(result.value.timing.server_ms>=result.value.timing.provider_ms);assert.ok(result.value.timing_key.includes('gpt-4.1-mini'));assert.equal(result.value.summary,fixture.summary);assert.ok(result.value.request_id);assert.ok(!Number.isNaN(Date.parse(result.value.generated_at)));

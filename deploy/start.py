@@ -25,7 +25,7 @@ def main():
         print("본인 Modal 계정에 공개 HTTPS 추론 API를 배포합니다. 비공개 인덱스가 계정으로 업로드되며 GPU 사용료가 발생할 수 있습니다.")
         if input("계속하려면 DEPLOY 입력: ").strip() != "DEPLOY":
             return
-        origin = input("배포한 Vercel 사이트 주소 (Modal 주소만 테스트하려면 Enter): ").strip().rstrip("/")
+        origin = input("배포한 Cloudflare Pages 사이트 주소 (Modal 주소만 테스트하려면 Enter): ").strip().rstrip("/")
         u = urlsplit(origin)
         if origin and (u.scheme != "https" or not u.hostname or u.username or u.password or u.path or u.query or u.fragment):
             raise SystemExit("사이트의 https://도메인 주소만 입력하세요.")
@@ -37,7 +37,7 @@ def main():
         run(str(py), "-m", "pip", "install", "modal>=1.1,<2")
         run(str(py), "-m", "modal", "setup")
         run(str(py), "-m", "modal", "deploy", "deploy/host_model.py", env={**os.environ,"FEELODY_WEB_ORIGINS":origin})
-        print("출력된 HTTPS 모델 주소를 Vercel의 FEELODY_API_ORIGIN (Production)에 넣고 Redeploy 하세요.")
+        print("출력된 HTTPS 모델 주소를 Cloudflare Pages에서 FEELODY_WEB_MODE=local 및 FEELODY_API_ORIGIN (Production)에 넣고 Redeploy 하세요.")
     else:
         run(str(py), "-m", "pip", "install", "-r", "requirements.txt")
         child_env = os.environ.copy()

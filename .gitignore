@@ -32,13 +32,14 @@ __pycache__/
 .vscode/
 .idea/
 dist/
-.vercel/
+.wrangler/
+.dev.vars*
 node_modules/
 !web/index.html
 !web/research.html
 !feelody_top3.html
 !web/cases.json
-!vercel.json
+!web/_routes.json
 !reports/top3_pilot.json
 .modal-client/
 .feelody-model-env/

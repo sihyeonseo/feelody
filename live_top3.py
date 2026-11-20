@@ -1,4 +1,4 @@
-"""Feelody's 30→3 inference service. Run behind a separate model host, not Vercel static hosting."""
+"""Feelody's 30→3 inference service. Run behind a separate model host, not Cloudflare Pages static hosting."""
 import os
 from feelody_service import create_service
 from feelody_reasons import excerpts

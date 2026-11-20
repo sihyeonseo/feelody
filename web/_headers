@@ -1,0 +1,4 @@
+/config.json
+  Cache-Control: no-cache
+/app.js
+  Cache-Control: no-cache
