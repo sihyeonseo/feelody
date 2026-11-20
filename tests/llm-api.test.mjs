@@ -2,8 +2,9 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {onRequest,normalize,providerConfig} from '../functions/api/recommend.js';
 
+import {tracks} from '../shared/hot100.mjs';
 const fixture={summary:'작은 성취가 있었던 하루',empathy:'차근차근 해낸 자신을 격려해도 좋겠어요.',
- songs:[1,2,3].map(i=>({title:'노래'+i,artist:'가수',reason:'성취의 기쁨에 어울리는 곡이에요.',youtube_url:'https://bad.example/'}))};
+ songs:tracks.slice(0,3).map(({title,artist})=>({title,artist,reason:'성취의 기쁨에 어울리는 곡이에요.',youtube_url:'https://bad.example/'}))};
 let seq=0;
 function req(body={diary:'기쁜 하루',mood:'joy'},method='POST'){
  return {method,body,headers:{'content-type':'application/json',host:'feelody.example',origin:'https://feelody.example','CF-Connecting-IP':'test-'+ ++seq}};
@@ -31,10 +32,11 @@ test('Pages Function handler contracts without real provider calls',async()=>{
   const repeated=await call(req({diary:'다른 곡 원함',excluded_songs:[fixture.songs[0]]}));
   assert.equal(repeated.code,502);assert.equal(repeated.value.code,'REPEATED_SELECTION');
   assert.equal((await call(req({diary:'테스트',excluded_songs:'invalid'}))).code,422);
+  assert.throws(()=>normalize({...fixture,songs:[{...fixture.songs[0],title:'Unlisted test track'},...fixture.songs.slice(1)]}),/outside chart/);
   const standardMock=globalThis.fetch,inputs=[];
   globalThis.fetch=async(url,opts)=>{
    const user=JSON.parse(JSON.parse(opts.body).messages[1].content);inputs.push(user);
-   const body={...fixture,summary:user.diary,songs:fixture.songs.map(s=>({...s,title:user.diary+s.title}))};
+   const body={...fixture,summary:user.diary,songs:fixture.songs.map((s,i)=>({...s,...tracks[i+(user.diary==='행복'?0:4)]}))};
    return {ok:true,json:async()=>({choices:[{finish_reason:'stop',message:{content:JSON.stringify(body)}}]})};
   };
   const a=await call(req({diary:'행복'})),b=await call(req({diary:'분노'}));

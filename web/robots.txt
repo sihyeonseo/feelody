@@ -1,4 +1,4 @@
 User-agent: *
 Disallow: /api/
 
-Sitemap: https://feelody.pages.dev/sitemap.xml
+Sitemap: https://feelody.shop/sitemap.xml

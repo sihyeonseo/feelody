@@ -2,3 +2,10 @@
   Cache-Control: no-cache
 /app.js
   Cache-Control: no-cache
+
+/account.js
+  Cache-Control: no-cache
+/account.css
+  Cache-Control: no-cache
+/
+  Cache-Control: no-cache
