@@ -14,10 +14,12 @@ function avatar(user){
 }
 export function returnPath(value,origin){
  try{const u=new URL(value||'/',origin);
+ if(u.origin===origin&&u.pathname==='/admin')return '/admin';
  if(u.origin===origin&&['/','/index','/index.html','/research','/research.html','/study','/study.html'].includes(u.pathname))return u.pathname+u.search+u.hash}catch{}
  return '/';
 }
-export async function onRequest({request:req,env,params}){
+export const onRequest=ctx=>handleAccount(ctx);
+export async function handleAccount({request:req,env,params},adminHandler){
  const url=new URL(req.url),origin=url.origin,action=params.action;
  const headers=new Headers({'Cache-Control':'private, no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff'});
  const json=(data,status=200)=>{headers.set('Content-Type','application/json');return new Response(JSON.stringify(data),{status,headers})};
@@ -29,10 +31,10 @@ export async function onRequest({request:req,env,params}){
  const put=s=>{if(!s.access_token||!s.refresh_token)throw Error();set('access',s.access_token,Math.max(60,Number(s.expires_in)||3600));set('refresh',s.refresh_token,60*60*24*30)};
  const remote=(path,options={})=>fetch(base+path,{...options,headers:{apikey:key,'Content-Type':'application/json',...options.headers}});
  try{
- if(req.method!==(action==='callback'||action==='session'?'GET':'POST'))return json({},405);
+ if(!adminHandler&&req.method!==(action==='callback'||action==='session'?'GET':'POST'))return json({},405);
  if(req.method==='POST'&&req.headers.get('Origin')!==origin)return json({},403);
  if(!base||!key)return action==='session'?json({configured:false,user:null}):json({},503);
- if(action==='start'){
+ if(!adminHandler&&action==='start'){
  const {provider,next}=await req.json();if(provider!=='google')return json({},400);
  const verifier=b64(crypto.getRandomValues(new Uint8Array(48)));
  const to=new URL(base+'/auth/v1/authorize');
@@ -40,17 +42,24 @@ export async function onRequest({request:req,env,params}){
  const path=returnPath(next,origin);if(path.length>1500)return json({},400);
  set('pkce',verifier,600);set('next',path,600);return json({url:to.href});
  }
- if(action==='callback'){
+ if(!adminHandler&&action==='callback'){
  const next=returnPath(get('next'),origin),verifier=get('pkce'),code=url.searchParams.get('code');
  set('pkce','',0);set('next','',0);
  if(verifier&&code){try{const r=await remote('/auth/v1/token?grant_type=pkce',{method:'POST',body:JSON.stringify({auth_code:code,code_verifier:verifier})});if(r.ok){put(await r.json());return go(next)}}catch{}}
  const back=new URL(next,origin);back.searchParams.set('login','failed');return go(back.pathname+back.search+back.hash)
  }
- if(!['session','entries','save','remove','import','logout'].includes(action))return json({},404);
+ if(!adminHandler&&!['session','entries','save','remove','import','logout'].includes(action))return json({},404);
  let access=get('access'),refresh=get('refresh');const bearer=()=>({Authorization:'Bearer '+access});
  let user=null;
  if(access){const r=await remote('/auth/v1/user',{headers:bearer()});if(r.ok)user=await r.json();else if(![401,403].includes(r.status))return json({},503)}
  if(!user&&refresh){const r=await remote('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:JSON.stringify({refresh_token:refresh})});if(r.ok){const s=await r.json();put(s);access=s.access_token;user=s.user}else if(r.status===400||r.status===401){clear()}else return json({},503)}
+ if(adminHandler){
+  if(!user?.id)return go('/admin/login');
+  const role=await remote('/rest/v1/profiles?select=role&id=eq.'+encodeURIComponent(user.id),{headers:bearer()});
+  if(!role.ok)return json({},503);
+  if((await role.json())[0]?.role!=='Admin')return new Response('Forbidden: administrator access required.',{status:403,headers});
+  return await adminHandler({headers,remote,bearer,go});
+ }
  if(action==='session')return json({configured:true,user:user?.id||null,avatarUrl:user?.id?avatar(user):null});
  if(action==='logout'){if(user){const r=await remote('/auth/v1/logout?scope=local',{method:'POST',headers:bearer()});if(!r.ok)return json({},503)}clear();return json({})}
  if(!user?.id||req.headers.get('X-Feelody-Account')!==user.id)return json({},401);
