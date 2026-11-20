@@ -15,7 +15,7 @@
 <meta property="og:url" content="https://feelody.vercel.app/research.html"><meta property="og:title" content="추천 실험실 | Feelody"><meta property="og:description" content="공개 예시로 일기와 가사의 유사도 검색 결과와 재순위화 후의 추천 세 곡을 비교해 보세요.">
 <meta property="og:image" content="https://feelody.vercel.app/share.png"><meta property="og:image:alt" content="Feelody 마음 달력"><meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://feelody.vercel.app/#website","name":"Feelody","url":"https://feelody.vercel.app/","inLanguage":"ko"},{"@type":"WebPage","url":"https://feelody.vercel.app/research.html","name":"추천 실험실 | Feelody","description":"공개 예시로 일기와 가사의 유사도 검색 결과와 재순위화 후의 추천 세 곡을 비교해 보세요.","inLanguage":"ko","isPartOf":{"@id":"https://feelody.vercel.app/#website"}}]}</script><link rel="stylesheet" href="./research.css"><script src="./research.js" defer></script><meta name="google-adsense-account" content="ca-pub-4639776942447769">
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4639776942447769" crossorigin="anonymous"></script>
+
 <script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -26,7 +26,7 @@
 </head>
 <body><header><b><i aria-hidden="true">♪</i> Feelody</b><a href="./">← 감정 달력</a></header>
 <main data-clarity-mask="true"><div class="intro"><small>FEELING × MELODY</small><h1>오늘의 일기,<br>세 곡의 플레이리스트<span>.</span></h1><p>이 실험실은 일기와 노래 가사를 비교하는 두 가지 방법을 보여줘요. ‘검색만’은 의미가 가까운 곡을 찾고, ‘재순위화’는 같은 후보를 다시 평가해 세 곡을 골라요. 아래 예시는 마음 달력에서 방금 받은 추천이 아니라 미리 계산한 연구 결과예요.</p></div>
-<div class="layout"><section class="panel"><small>01　/　DIARY</small><h2>일기 선택</h2><div class="switch"><button id="sample" aria-pressed="true">실험 예시</button><button id="live" aria-pressed="false">내 일기</button></div>
+<p><a href="./study.html">두 사례로 읽는 실험 결과와 한계</a></p><div class="layout"><section class="panel"><small>01　/　DIARY</small><h2>일기 선택</h2><div class="switch"><button id="sample" aria-pressed="true">실험 예시</button><button id="live" aria-pressed="false">내 일기</button></div>
 <div id="samples"><label for="cases">기록의 주제</label><select id="cases"></select><p>개인 일기 대신 주제만 공개합니다. 오른쪽 결과는 해당 원문으로 미리 계산했습니다.</p></div>
 <form id="entry" hidden><label for="diary">오늘 느낀 마음</label><textarea id="diary" rows="5" required maxlength="4000" placeholder="오늘은 어떤 하루였나요?"></textarea><p id="hint"></p><button id="submit" class="primary">세 곡 찾기</button></form></section>
 <section class="panel record"><small>02　/　TRACKLIST</small><h2 id="title">추천 플레이리스트</h2><div id="methods" class="switch"><button id="rerank" aria-pressed="true">재순위화</button><button id="search" aria-pressed="false">검색만</button></div><p id="status" role="status"></p><ol id="tracks"></ol></section></div>
