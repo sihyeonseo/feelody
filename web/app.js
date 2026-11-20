@@ -7,8 +7,8 @@ let month=new Date();month.setDate(1);let active=null,picked=null,manual=false,d
 // Public sample catalog; random selection is not an emotion model result.
 const RANDOM_TRACKS=[{"title":"내일이 오면 (Feat. 기리보이, BIG Naughty (서동현))","artist":"릴보이 (lIlBOI)"},{"title":"N분의1 (Feat. 다이나믹듀오)","artist":"넉살, 한해, RYNO (라이노), 조우찬"},{"title":"구해주오","artist":"CB Mass"},{"title":"Ordinary People","artist":"SG 워너비"},{"title":"정이라고 하자 (Feat. 10CM)","artist":"BIG Naughty (서동현)"},{"title":"CREDIT (Feat. 염따, 기리보이, Zion.T)","artist":"릴보이 (lIlBOI)"},{"title":"The Time Goes On","artist":"BewhY (비와이)"},{"title":"환희","artist":"싸이 (PSY)"},{"title":"겁 (Feat. 태양)","artist":"MINO (송민호)"},{"title":"좋아보여 (Feat. 검정치마)","artist":"버벌진트"},{"title":"회상 (Feat. 백지영)","artist":"리쌍"},{"title":"EASY","artist":"LE SSERAFIM (르세라핌)"},{"title":"그리고 그후","artist":"프리스타일"},{"title":"기다렸다 가","artist":"다이나믹 듀오, 첸 (CHEN)"},{"title":"친구","artist":"방탄소년단"},{"title":"One Love","artist":"원타임"},{"title":"슬피 우는 새 (Feat. 이수영)","artist":"아웃사이더"},{"title":"Wash Away (Feat. 에일리)","artist":"긱스 (Geeks)"},{"title":"바코드 (Prod. GroovyRoom)","artist":"김하온 (HAON), 빈첸"},{"title":"남자기 때문에","artist":"드렁큰 타이거"},{"title":"죽일 놈 (Guilty)","artist":"다이나믹 듀오"},{"title":"연애소설 (Feat. 아이유)","artist":"에픽하이 (EPIK HIGH)"},{"title":"빌었어","artist":"창모 (CHANGMO)"},{"title":"곰인형 (Feat. 해금)","artist":"린"},{"title":"내 생애 가장 행복한 시간 (Feat. 허각)","artist":"MC몽"},{"title":"당신의 밤 (Feat. 오혁)","artist":"황광희 X 개코"},{"title":"시간을 찾아서 (Feat. 이적)","artist":"김진표"},{"title":"너에게 닿기를","artist":"10CM"},{"title":"180˚ (Feat. 인태 & Supasize)","artist":"MC몽"},{"title":"마이동풍","artist":"배치기"},{"title":"우연 (우울한 우연)","artist":"베이비 복스"},{"title":"끝","artist":"싸이 (PSY)"},{"title":"그땐 그땐 그땐","artist":"Supreme Team, 영준"},{"title":"A Real Man","artist":"스윙스, 에일리(Ailee)"},{"title":"Forever (Prod. By GRAY)","artist":"BewhY (비와이)"},{"title":"UPT Paradoxxx","artist":"업타운"},{"title":"스물셋","artist":"아이유"},{"title":"Memories... (Smiling Tears)","artist":"윤미래"},{"title":"flex (Prod. By 기리보이)","artist":"기리보이, 키드밀리 (Kid Milli), NO:EL, 스윙스"},{"title":"Summer Hate (Feat. 비)","artist":"지코 (ZICO)"},{"title":"Hot Summer","artist":"f(x)"},{"title":"치맛바람 (Chi Mat Ba Ram)","artist":"브레이브걸스"},{"title":"땡땡땡","artist":"Supreme Team"}];
 function randomSongs(){const pool=[...RANDOM_TRACKS];for(let i=pool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[pool[i],pool[j]]=[pool[j],pool[i]]}return pool.slice(0,3).map(s=>({...s}))}
-function read(day){try{const v=JSON.parse(localStorage.getItem(prefix+day));return v&&typeof v.text==='string'&&hasMood(v.mood)?v:null}catch{return null}}
-function write(day,v){try{localStorage.setItem(prefix+day,JSON.stringify(v));return true}catch{$('message').textContent='브라우저에 저장할 수 없어요. 일기를 복사해 보관하거나 저장 공간을 확인해 주세요.';return false}}
+function read(day){if(window.journalAccount?.user)return journalAccount.entries.get(day)||null;try{const v=JSON.parse(localStorage.getItem(prefix+day));return v&&typeof v.text==='string'&&hasMood(v.mood)?v:null}catch{return null}}
+async function write(day,v){if(window.journalAccount?.user){try{document.querySelector('main').inert=true;await journalAccount.save(day,v);return true}catch{$("message").textContent="계정에 저장하지 못했어요. 연결을 확인하고 다시 시도해 주세요.";return false}finally{document.querySelector("main").inert=false}}try{localStorage.setItem(prefix+day,JSON.stringify(v));return true}catch{$('message').textContent='브라우저에 저장할 수 없어요. 일기를 복사해 보관하거나 저장 공간을 확인해 주세요.';return false}}
 function face(m){const i=node('i','face '+m);i.style.setProperty('--c',MOODS[m].color);i.setAttribute('aria-hidden','true');return i}
 function disc(){const i=node('div','disc');i.setAttribute('aria-hidden','true');return i}
 function calendar(){
@@ -50,10 +50,11 @@ function note(){
  if(active)$('modeNote').textContent=!ready?'추천 설정 확인 중…':llmMode?
   (llmConfigured?'추천받기를 누르면 일기가 이 브라우저에 저장돼요. 일기와 기분을 추천 서비스로 보내 오늘의 마음에 어울리는 세 곡을 찾아요.':llmMessage||'추천 서비스에 연결하지 못했어요. 추천받기를 누르면 일기는 이 브라우저에 저장돼요.'):
   api?'추천받기를 누르면 일기가 이 브라우저에 저장되고, 추천 서버로 전송돼 어울리는 세 곡을 찾아요.':'현재는 일기 분석 없이 등록된 곡 목록에서 세 곡을 골라드려요.';
+ if(active&&window.journalAccount?.user)$('modeNote').textContent=$('modeNote').textContent.replaceAll('이 브라우저','내 계정');
 }
 function openDay(day){
  active=day;dirty=false;$('explain').checked=false;const r=read(day),[y,m,d]=day.split('-').map(Number);$('home').hidden=true;$('editor').hidden=false;
- $('dayTitle').textContent=m+'월 '+d+'일 '+['일','월','화','수','목','금','토'][new Date(y,m-1,d).getDay()]+'요일';$('diary').value=r?.text||'';$('message').textContent='';choose(r?.mood||null,!!r);$('remove').hidden=!r;if(!llmMode&&r?.text&&(!Array.isArray(r.songs)||r.songs.length!==3)){r.source='random';r.songs=randomSongs();write(day,r)}viewSongs(r);note();$('dayTitle').focus();
+ $('dayTitle').textContent=m+'월 '+d+'일 '+['일','월','화','수','목','금','토'][new Date(y,m-1,d).getDay()]+'요일';$('diary').value=r?.text||'';$('message').textContent='';choose(r?.mood||null,!!r);$('remove').hidden=!r;if(!window.journalAccount?.user&&!llmMode&&r?.text&&(!Array.isArray(r.songs)||r.songs.length!==3)){r.source='random';r.songs=randomSongs();write(day,r)}viewSongs(r);note();$('dayTitle').focus();
 }
 function home(){if(dirty&&!window.confirm('저장하지 않은 수정 내용을 닫을까요?'))return;busy?.abort();busy=null;$('save').disabled=!ready;dirty=false;const old=active;active=null;$('home').hidden=false;$('editor').hidden=true;calendar();$('grid').querySelector('[data-day="'+old+'"]')?.focus()}
 $('back').onclick=home;$('prev').onclick=()=>{month.setMonth(month.getMonth()-1);calendar()};$('next').onclick=()=>{month.setMonth(month.getMonth()+1);calendar()};$('now').onclick=()=>{month=new Date();month.setDate(1);calendar()};$('write').onclick=()=>{month=new Date();month.setDate(1);openDay(today())};
@@ -67,8 +68,8 @@ for(const m of labels){
 $('diary').oninput=()=>{edited();if(!manual){
  const t=$('diary').value;let idx=-1,guess=null;for(const m of labels){for(const match of t.matchAll(new RegExp(MOODS[m].hint.source,'g'))){if(match.index>idx){idx=match.index;guess=m}}}choose(guess,false);}
 };
-$('remove').onclick=()=>{if(!window.confirm('이 날짜의 일기와 플레이리스트를 삭제할까요?'))return;
- try{localStorage.removeItem(prefix+active)}catch{$('message').textContent='기록을 삭제하지 못했습니다.';return}dirty=false;home()};
+$('remove').onclick=async()=>{if(!window.confirm('이 날짜의 일기와 플레이리스트를 삭제할까요?'))return;
+ busy?.abort();try{if(window.journalAccount?.user)await journalAccount.remove(active);else localStorage.removeItem(prefix+active)}catch{$('message').textContent='기록을 삭제하지 못했습니다.';return}dirty=false;home()};
 function recentWaits(key){
  if(!key)return [];
  try{const value=JSON.parse(localStorage.getItem('feelody/timings/v1'));
@@ -99,7 +100,7 @@ function startWait(ctrl,day){
 async function saveWithLLM(day,text,mood,excluded=[]){
  // A failed new request must not look like another successful copy of an old response.
  const r={text,mood,source:'none',songs:[]};
- if(!write(day,r))return;
+ if(!await write(day,r))return;
  dirty=false;$('remove').hidden=false;viewSongs(r);
  const ctrl=new AbortController();busy=ctrl;$('save').disabled=true;
  const waiting=startWait(ctrl,day);
@@ -117,7 +118,7 @@ async function saveWithLLM(day,text,mood,excluded=[]){
   Object.assign(r,{source:'llm',summary:data.summary,empathy:data.empathy,
    request_id:data.request_id,generated_at:data.generated_at,
    songs:data.songs.map(({title,artist,reason,youtube_url})=>({title,artist,reason,youtube_url}))});
-  if(write(day,r)){viewSongs(r);$('message').textContent='일기와 마음 기록, 추천곡을 저장했어요. · '+waiting.elapsed().toFixed(1)+'초 소요'}
+  if(await write(day,r)){viewSongs(r);$('message').textContent='일기와 마음 기록, 추천곡을 저장했어요. · '+waiting.elapsed().toFixed(1)+'초 소요'}
  }catch(e){if(busy===ctrl&&!dirty&&active===day)$('message').textContent='일기는 저장됐어요. '+(e.name==='AbortError'?'응답이 늦어져 중단했어요. 잠시 후 다시 시도해 주세요.':e.message)}
  finally{waiting.stop();clearTimeout(timer);if(busy===ctrl){busy=null;$('save').disabled=false}}
 }
@@ -133,28 +134,28 @@ $('save').onclick=async()=>{
  if(llmMode){await saveWithLLM(day,text,m);return}
  const r={text,mood:m,source:'random',songs:randomSongs()};
  const old=read(day);if(old?.source==='model'&&old.text===text&&Array.isArray(old.songs)&&old.songs.length===3){r.source='model';r.songs=old.songs}
- if(!write(day,r))return;dirty=false;$('remove').hidden=false;viewSongs(r);
+ if(!await write(day,r))return;dirty=false;$('remove').hidden=false;viewSongs(r);
  if(!api){$('message').textContent=r.source==='model'?'일기와 기존 추천곡 세 곡을 저장했어요.':'일기와 추천곡 세 곡을 저장했어요.';return}
  const ctrl=new AbortController();busy=ctrl;$('save').disabled=true;$('message').textContent='일기를 저장했어요. 어울리는 세 곡을 찾고 있어요…';
  const timer=setTimeout(()=>ctrl.abort(),300000);
- const show=(songs,terminal,reasonState)=>{
+ const show=async(songs,terminal,reasonState)=>{
   if(!Array.isArray(songs)||songs.length!==3||songs.some(s=>typeof s?.title!=='string'||typeof s?.artist!=='string'))throw Error();
   if(busy!==ctrl||dirty||active!==day||ctrl.signal.aborted)return;
   r.source='model';r.songs=songs.map(({title,artist,reason})=>({title,artist,...(typeof reason==='string'?{reason}:{})}));
-  if(write(day,r)){viewSongs(r);$('message').textContent=!terminal?'세 곡을 찾았어요. 추천 이유를 작성하고 있어요…':
+  if(await write(day,r)){viewSongs(r);$('message').textContent=!terminal?'세 곡을 찾았어요. 추천 이유를 작성하고 있어요…':
    ['disabled','limit','unavailable','insufficient'].includes(reasonState)?'세 곡을 저장했어요. 이번에는 추천 이유를 제공할 수 없어요.':'일기와 세 곡을 저장했어요.'}
  };
  const post=async(path,body)=>{const v=await fetch(api+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:ctrl.signal});
   if(!v.ok)throw Error(String(v.status));return v.json()};
  try{
-  if(legacy){show((await post('/recommend',{diary:text})).songs,true);return}
+  if(legacy){await show((await post('/recommend',{diary:text})).songs,true);return}
   const job=await post('/jobs',{diary:text,explain:!!provider&&$('explain').checked});
   for(;;){
    const v=await fetch(api+'/jobs/'+encodeURIComponent(job.job_id),{headers:{Authorization:'Bearer '+job.access_token},cache:'no-store',signal:ctrl.signal});
    if(!v.ok)throw Error(String(v.status));const data=await v.json();
    if(busy!==ctrl||dirty||active!==day||ctrl.signal.aborted)return;
-   if(data.status==='succeeded'){show(data.songs,true,data.explanation_status);break}
-   if(data.status==='explaining'){show(data.songs,false)}
+   if(data.status==='succeeded'){await show(data.songs,true,data.explanation_status);break}
+   if(data.status==='explaining'){await show(data.songs,false)}
    else if(data.status==='queued'||data.status==='running'){$('message').textContent=data.status==='queued'?'일기를 저장했어요. 추천 순서를 기다리고 있어요…':'일기와 가사를 비교하고 있어요…'}
    else throw Error();
    await new Promise(ok=>setTimeout(ok,1000));
