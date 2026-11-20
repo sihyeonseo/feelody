@@ -30,7 +30,9 @@
  uid=session.user;
  window.addEventListener('pageshow',e=>{if(e.persisted)location.reload()});
  window.addEventListener('focus',async()=>{try{if((await call('session')).user!==uid){entries.clear();main.hidden=true;dirty=false;location.reload()}}catch{}});
- if(uid){account.textContent='내 계정';el('accountTitle').textContent='내 마음 기록';help.textContent='일기와 추천곡을 이 계정에 보관해요.';
+ if(uid){account.classList.add('signed-in');account.setAttribute('aria-label','내 계정 열기');account.title='내 계정';account.replaceChildren();
+ if(session.avatarUrl){const img=document.createElement('img');img.alt='';img.referrerPolicy='no-referrer';img.onerror=()=>img.remove();img.src=session.avatarUrl;account.append(img)}
+ el('accountTitle').textContent='내 마음 기록';help.textContent='일기와 추천곡을 이 계정에 보관해요.';
  el('providers').hidden=true;el('memberActions').hidden=false;el('guestContinue').textContent='달력으로';await fetchEntries()}
  authReady=true;
  const current=new URL(location.href),day=current.searchParams.get('day');

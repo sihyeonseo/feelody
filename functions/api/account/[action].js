@@ -2,6 +2,16 @@
 const root='/api/account/', cookieName=k=>'__Host-feelody-'+k;
 const b64=buf=>btoa(String.fromCharCode(...new Uint8Array(buf))).replaceAll('+','-').replaceAll('/','_').replace(/=+$/,'');
 const dayOK=s=>typeof s==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(s);
+function avatar(user){
+ const profiles=[user?.user_metadata,...(user?.identities||[]).map(i=>i.identity_data)];
+ for(const p of profiles)for(const value of [p?.avatar_url,p?.picture]){
+  if(typeof value!=='string')continue;
+  try{const u=new URL(value);if(!['https:','http:'].includes(u.protocol)||u.username||u.password||u.port)continue;
+   if(!/(^|\.)(googleusercontent\.com)$/.test(u.hostname))continue;
+   u.protocol='https:';return u.href}catch{}
+ }
+ return null;
+}
 export function returnPath(value,origin){
  try{const u=new URL(value||'/',origin);
  if(u.origin===origin&&['/','/index','/index.html','/research','/research.html','/study','/study.html'].includes(u.pathname))return u.pathname+u.search+u.hash}catch{}
@@ -23,7 +33,7 @@ export async function onRequest({request:req,env,params}){
  if(req.method==='POST'&&req.headers.get('Origin')!==origin)return json({},403);
  if(!base||!key)return action==='session'?json({configured:false,user:null}):json({},503);
  if(action==='start'){
- const {provider,next}=await req.json();if(!['google','kakao'].includes(provider))return json({},400);
+ const {provider,next}=await req.json();if(provider!=='google')return json({},400);
  const verifier=b64(crypto.getRandomValues(new Uint8Array(48)));
  const to=new URL(base+'/auth/v1/authorize');
  to.search=new URLSearchParams({provider,redirect_to:origin+root+'callback',code_challenge:b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier))),code_challenge_method:'s256'});
@@ -41,7 +51,7 @@ export async function onRequest({request:req,env,params}){
  let user=null;
  if(access){const r=await remote('/auth/v1/user',{headers:bearer()});if(r.ok)user=await r.json();else if(![401,403].includes(r.status))return json({},503)}
  if(!user&&refresh){const r=await remote('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:JSON.stringify({refresh_token:refresh})});if(r.ok){const s=await r.json();put(s);access=s.access_token;user=s.user}else if(r.status===400||r.status===401){clear()}else return json({},503)}
- if(action==='session')return json({configured:true,user:user?.id||null});
+ if(action==='session')return json({configured:true,user:user?.id||null,avatarUrl:user?.id?avatar(user):null});
  if(action==='logout'){if(user){const r=await remote('/auth/v1/logout?scope=local',{method:'POST',headers:bearer()});if(!r.ok)return json({},503)}clear();return json({})}
  if(!user?.id||req.headers.get('X-Feelody-Account')!==user.id)return json({},401);
  const body=await req.json(), query=new URLSearchParams({user_id:'eq.'+user.id});
