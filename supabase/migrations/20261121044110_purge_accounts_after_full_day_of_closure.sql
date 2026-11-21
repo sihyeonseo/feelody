@@ -1,0 +1,2 @@
+-- Purge on the first minute tick after a full 24 hours of closure.
+select cron.schedule('feelody_purge_closed_accounts','* * * * *',$job$delete from auth.users u using public.profiles p where p.id=u.id and p.deleted_at is not null and p.deleted_at <= statement_timestamp() - interval '24 hours'$job$);
