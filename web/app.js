@@ -100,6 +100,12 @@ function startWait(ctrl,day){
  return {stop,elapsed};
 }
 $('modelChoice').onchange=note;
+async function readPlaylistResponse(resp){
+ const ref=(resp.headers.get('cf-ray')||'').replace(/[^a-zA-Z0-9-]/g,'').slice(0,40);
+ const fail=()=>Error('Playlist unavailable (HTTP '+resp.status+(ref?', ref '+ref:'')+'). Please try again later.');
+ if(!(resp.headers.get('content-type')||'').toLowerCase().includes('application/json'))throw fail();
+ try{const value=await resp.json();if(!value||typeof value!=='object'||Array.isArray(value))throw fail();return value}catch{throw fail()}
+}
 async function saveWithLLM(day,text,mood,excluded=[]){
  if(!$('modelChoice').checked){
  if(excluded.length){$('message').textContent='Enable the recommendation option first.';return}
@@ -115,9 +121,9 @@ async function saveWithLLM(day,text,mood,excluded=[]){
  $('message').textContent='Entry saved. Finding songs for your mood…';
  const timer=setTimeout(()=>ctrl.abort(),55000);
  try{
-  const resp=await fetch('/api/recommend',{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json'},
+  const resp=await fetch('/api/recommend',{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json','Accept':'application/json'},
    body:JSON.stringify({diary:text,mood,excluded_songs:excluded}),signal:ctrl.signal});
-  const data=await resp.json();
+  const data=await readPlaylistResponse(resp);
   if(!resp.ok)throw Error(typeof data.message==='string'?data.message:'Could not get recommendations.');
   if(data.source!=='llm'||typeof data.summary!=='string'||typeof data.empathy!=='string'||
    !Array.isArray(data.songs)||data.songs.length!==3||data.songs.some(s=>['title','artist','reason'].some(k=>typeof s?.[k]!=='string')))throw Error('Could not read the response.');
