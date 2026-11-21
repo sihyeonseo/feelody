@@ -48,7 +48,7 @@ export async function handleAccount({request:req,env,params},adminHandler){
  if(verifier&&code){try{const r=await remote('/auth/v1/token?grant_type=pkce',{method:'POST',body:JSON.stringify({auth_code:code,code_verifier:verifier})});if(r.ok){put(await r.json());return go(next)}}catch{}}
  const back=new URL(next,origin);back.searchParams.set('login','failed');return go(back.pathname+back.search+back.hash)
  }
- if(!adminHandler&&!['session','entries','save','remove','import','logout'].includes(action))return json({},404);
+ if(!adminHandler&&!['session','entries','save','remove','import','logout','withdraw'].includes(action))return json({},404);
  let access=get('access'),refresh=get('refresh');const bearer=()=>({Authorization:'Bearer '+access});
  let user=null;
  if(access){const r=await remote('/auth/v1/user',{headers:bearer()});if(r.ok)user=await r.json();else if(![401,403].includes(r.status))return json({},503)}
@@ -60,9 +60,19 @@ export async function handleAccount({request:req,env,params},adminHandler){
   if((await role.json())[0]?.role!=='Admin')return new Response('관리자 권한이 있는 계정만 접근할 수 있습니다.',{status:403,headers});
   return await adminHandler({headers,remote,bearer,go});
  }
+ if(action==='session'&&user?.id){
+ const r=await remote('/rest/v1/profiles?select=id&id=eq.'+encodeURIComponent(user.id),{headers:bearer()});
+ if(!r.ok)return json({},503);
+ if(!(await r.json()).length){clear();return json({configured:true,user:null,withdrawn:true})}
+ }
  if(action==='session')return json({configured:true,user:user?.id||null,avatarUrl:user?.id?avatar(user):null});
  if(action==='logout'){if(user){const r=await remote('/auth/v1/logout?scope=local',{method:'POST',headers:bearer()});if(!r.ok)return json({},503)}clear();return json({})}
  if(!user?.id||req.headers.get('X-Feelody-Account')!==user.id)return json({},401);
+ if(action==='withdraw'){
+ const r=await remote('/rest/v1/rpc/feelody_withdraw',{method:'POST',headers:bearer(),body:'{}'});
+ if(!r.ok)return json({},r.status);
+ clear();return json({withdrawn:true});
+ }
  const body=await req.json(), query=new URLSearchParams({user_id:'eq.'+user.id});
  let method='GET',payload,prefer;
  if(action==='entries'){query.set('select','day,entry');query.set('order','day.asc');query.set('limit','100');if(body.last){if(!dayOK(body.last))return json({},400);query.set('day','gt.'+body.last)}}

@@ -21,13 +21,15 @@
  for(const b of providerButtons)b.onclick=async()=>{if(starting)return;if(dirty&&!confirm('Discard unsaved changes and sign in?'))return;
  starting=true;enable(false);status.textContent='Opening Google sign-in…';try{const next=new URL(location.href);if(active)next.searchParams.set('day',active);next.searchParams.delete('login');const result=await call('start',{provider:b.dataset.provider,next:next.pathname+next.search+next.hash});if(typeof result.url!=='string')throw Error();dirty=false;location.assign(result.url)}catch(e){starting=false;status.textContent=e.status===503?'Sign-in is unavailable. Please try again shortly.':e.status===404||e instanceof SyntaxError?'Could not reach the sign-in endpoint. Please reload and try again.':'Could not connect. Try signing in again.';enable(true)}};
  el('logout').onclick=async()=>{if(dirty&&!confirm('Discard unsaved changes and sign out?'))return;try{await call('logout',{});dirty=false;location.replace(location.pathname)}catch{status.textContent='Could not sign out. Please try again.'}};
+ if(el('withdraw'))el('withdraw').onclick=async e=>{if(!uid||!confirm('Close your Feelody account? Your profile and saved entries will be hidden and signing in again will not restore them. Guest entries on this device will stay.'))return;
+ const btn=e.currentTarget;btn.disabled=true;try{await call('withdraw',{});entries.clear();dirty=false;location.replace(location.pathname)}catch{status.textContent='Could not confirm account closure. Refresh to check your account.';btn.disabled=false}};
  el('importGuest').onclick=async e=>{if(!uid||!confirm('Copy guest entries to your account? Existing dates will be kept and the originals will stay on this device.'))return;
  const btn=e.currentTarget;btn.disabled=true;try{const rows=[];for(const k of Object.keys(localStorage)){if(!k.startsWith(prefix))continue;
  const day=k.slice(prefix.length);if(!/^\d{4}-\d{2}-\d{2}$/.test(day))continue;const entry=JSON.parse(localStorage.getItem(k));if(typeof entry?.text==='string'&&hasMood(entry.mood))rows.push({day,entry,user_id:uid})}
  for(let i=0;i<rows.length;i+=50)await call('import',{rows:rows.slice(i,i+50)});
  await fetchEntries();status.textContent=rows.length?'Entries imported. Existing account entries were kept.':'No guest entries to import.'}catch{status.textContent='Import did not finish. Please try again.'}finally{btn.disabled=false}};
  try{const session=await call('session');if(!session.configured){if(!starting)status.textContent='Sign-in is not configured yet. You can keep writing as a guest.';return}
- uid=session.user;
+ uid=session.user;if(session.withdrawn){status.textContent='This account is closed. You can still write as a guest.';dlg.showModal()}
  window.addEventListener('pageshow',e=>{if(e.persisted)location.reload()});
  window.addEventListener('focus',async()=>{try{if((await call('session')).user!==uid){entries.clear();main.hidden=true;dirty=false;location.reload()}}catch{}});
  if(uid){account.classList.add('signed-in');account.setAttribute('aria-label','Open account menu');account.title='Account';account.innerHTML='<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>';
