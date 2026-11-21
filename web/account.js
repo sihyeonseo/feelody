@@ -38,7 +38,7 @@
  }account.classList.add('signed-in');account.setAttribute('aria-label','Open account menu');account.title='Account';account.innerHTML='<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>';
  if(session.avatarUrl){const img=document.createElement('img');img.alt='';img.referrerPolicy='no-referrer';img.onerror=()=>img.remove();img.src=session.avatarUrl;account.append(img)}
  el('accountTitle').textContent='My journal';help.textContent='Your entries and playlists are saved to this account.';
- el('providers').hidden=true;el('memberActions').hidden=false;el('guestContinue').textContent='Back to calendar';await fetchEntries()}
+ el('providers').hidden=true;el('memberActions').hidden=false;if(el('accountFooter'))el('accountFooter').hidden=false;el('guestContinue').textContent='Back to calendar';await fetchEntries()}
  authReady=true;
  const current=new URL(location.href),day=current.searchParams.get('day');
  if(/^\d{4}-\d{2}-\d{2}$/.test(day||'')){month=new Date(day+'T12:00:00');month.setDate(1);openDay(day)}
