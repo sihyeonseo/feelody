@@ -30,6 +30,9 @@ export async function handleAccount({request:req,env,params},adminHandler){
  const clear=()=>{set('access','',0);set('refresh','',0)};
  const put=s=>{if(!s.access_token||!s.refresh_token)throw Error();set('access',s.access_token,Math.max(60,Number(s.expires_in)||3600));set('refresh',s.refresh_token,60*60*24*30)};
  const remote=(path,options={})=>fetch(base+path,{...options,headers:{apikey:key,'Content-Type':'application/json',...options.headers}});
+ const writer=env.FEELODY_ACTIVITY_WRITER||'';
+ const activity=(token,action,screen='')=>remote('/rest/v1/rpc/feelody_activity',{method:'POST',signal:AbortSignal.timeout(2500),headers:{Authorization:'Bearer '+token,'X-Feelody-Writer':writer},body:JSON.stringify({action,screen})});
+ const record=async(token,event)=>{if(writer.length>=32)try{await activity(token,event)}catch{}};
  try{
  if(!adminHandler&&req.method!==(action==='callback'||action==='session'?'GET':'POST'))return json({},405);
  if(req.method==='POST'&&req.headers.get('Origin')!==origin)return json({},403);
@@ -45,10 +48,10 @@ export async function handleAccount({request:req,env,params},adminHandler){
  if(!adminHandler&&action==='callback'){
  const next=returnPath(get('next'),origin),verifier=get('pkce'),code=url.searchParams.get('code');
  set('pkce','',0);set('next','',0);
- if(verifier&&code){try{const r=await remote('/auth/v1/token?grant_type=pkce',{method:'POST',body:JSON.stringify({auth_code:code,code_verifier:verifier})});if(r.ok){put(await r.json());return go(next)}}catch{}}
+ if(verifier&&code){try{const r=await remote('/auth/v1/token?grant_type=pkce',{method:'POST',body:JSON.stringify({auth_code:code,code_verifier:verifier})});if(r.ok){const session=await r.json();put(session);await record(session.access_token,'login');return go(next)}}catch{}}
  const back=new URL(next,origin);back.searchParams.set('login','failed');return go(back.pathname+back.search+back.hash)
  }
- if(!adminHandler&&!['session','entries','save','remove','import','logout','withdraw'].includes(action))return json({},404);
+ if(!adminHandler&&!['session','entries','save','remove','import','logout','withdraw','activity-choice','visit'].includes(action))return json({},404);
  let access=get('access'),refresh=get('refresh');const bearer=()=>({Authorization:'Bearer '+access});
  let user=null;
  if(access){const r=await remote('/auth/v1/user',{headers:bearer()});if(r.ok)user=await r.json();else if(![401,403].includes(r.status))return json({},503)}
@@ -61,13 +64,24 @@ export async function handleAccount({request:req,env,params},adminHandler){
   return await adminHandler({headers,remote,bearer,go});
  }
  if(action==='session'&&user?.id){
- const r=await remote('/rest/v1/profiles?select=id&id=eq.'+encodeURIComponent(user.id),{headers:bearer()});
+ const r=await remote('/rest/v1/profiles?select=id,activity_opt_in_at&id=eq.'+encodeURIComponent(user.id),{headers:bearer()});
  if(!r.ok)return json({},503);
- if(!(await r.json()).length){clear();return json({configured:true,user:null,withdrawn:true})}
+ const profile=(await r.json())[0];if(!profile){clear();return json({configured:true,user:null,withdrawn:true})}
+ return json({configured:true,user:user.id,avatarUrl:avatar(user),activityEnabled:!!profile.activity_opt_in_at,activityAvailable:writer.length>=32});
  }
  if(action==='session')return json({configured:true,user:user?.id||null,avatarUrl:user?.id?avatar(user):null});
- if(action==='logout'){if(user){const r=await remote('/auth/v1/logout?scope=local',{method:'POST',headers:bearer()});if(!r.ok)return json({},503)}clear();return json({})}
+ if(action==='logout'){if(user){const r=await remote('/auth/v1/logout?scope=local',{method:'POST',headers:bearer()});if(!r.ok)return json({},503);await record(access,'logout')}clear();return json({})}
+ if(action==='visit'){
+ if(!user?.id||writer.length<32)return json({});
+ const b=await req.json();if(!['calendar','entry','research','study'].includes(b.screen))return json({},400);
+ const r=await activity(access,'visit',b.screen);return json({},r.ok?200:503)
+ }
  if(!user?.id||req.headers.get('X-Feelody-Account')!==user.id)return json({},401);
+ if(action==='activity-choice'){
+ const b=await req.json();if(typeof b.enable!=='boolean')return json({},400);
+ if(b.enable&&writer.length<32)return json({},503);
+ const r=await activity(access,b.enable?'enable':'disable');return json({},r.ok?200:503)
+ }
  if(action==='withdraw'){
  const r=await remote('/rest/v1/rpc/feelody_withdraw',{method:'POST',headers:bearer(),body:'{}'});
  if(!r.ok)return json({},r.status);

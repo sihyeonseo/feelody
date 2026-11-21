@@ -32,7 +32,10 @@
  uid=session.user;if(session.withdrawn){status.textContent='This account is closed. You can still write as a guest.';dlg.showModal()}
  window.addEventListener('pageshow',e=>{if(e.persisted)location.reload()});
  window.addEventListener('focus',async()=>{try{if((await call('session')).user!==uid){entries.clear();main.hidden=true;dirty=false;location.reload()}}catch{}});
- if(uid){account.classList.add('signed-in');account.setAttribute('aria-label','Open account menu');account.title='Account';account.innerHTML='<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>';
+ if(uid){const box=el('activityChoice');if(box){
+ box.checked=!!session.activityEnabled;el('activityControl').hidden=el('activityInfo').hidden=!(session.activityAvailable||box.checked);
+ box.onchange=async()=>{const enabled=box.checked;box.disabled=true;try{await call('activity-choice',{enable:enabled});status.textContent=enabled?'Activity history is on.':'Activity history is off. Stored activity was cleared.'}catch{box.checked=!enabled;status.textContent='Could not save your choice.'}finally{box.disabled=false}};
+ }account.classList.add('signed-in');account.setAttribute('aria-label','Open account menu');account.title='Account';account.innerHTML='<svg aria-hidden="true" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>';
  if(session.avatarUrl){const img=document.createElement('img');img.alt='';img.referrerPolicy='no-referrer';img.onerror=()=>img.remove();img.src=session.avatarUrl;account.append(img)}
  el('accountTitle').textContent='My journal';help.textContent='Your entries and playlists are saved to this account.';
  el('providers').hidden=true;el('memberActions').hidden=false;el('guestContinue').textContent='Back to calendar';await fetchEntries()}
