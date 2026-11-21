@@ -46,13 +46,15 @@ function viewSongs(r){
  }
 }
 function note(){
- $('save').textContent='Find my songs';
+ $('modelChoiceLabel').hidden=!llmMode;
+ $('save').textContent=llmMode&&!$('modelChoice').checked?'Save entry':'Find my songs';
  if(active)$('modeNote').textContent=!ready?'Checking recommendations…':llmMode?
-  (llmConfigured?'Your entry is saved in this browser. Its text and mood go to the recommendation service.':llmMessage||'Recommendations are unavailable. Your entry can still be saved in this browser.'):
+  (llmConfigured?'Save your entry here, or choose to send it for song recommendations.':llmMessage||'Recommendations are unavailable. Your entry can still be saved in this browser.'):
   api?'Your entry is saved in this browser and sent to the music model.':'Sample mode picks three tracks without analyzing the entry.';
  if(active&&window.journalAccount?.user)$('modeNote').textContent=$('modeNote').textContent.replaceAll('in this browser','to your account');
 }
 function openDay(day){
+ $('modelChoice').checked=false;
  active=day;dirty=false;$('explain').checked=false;const r=read(day),[y,m,d]=day.split('-').map(Number);$('home').hidden=true;$('editor').hidden=false;
  $('dayTitle').textContent=new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});$('diary').value=r?.text||'';$('message').textContent='';choose(r?.mood||null,!!r);$('remove').hidden=!r;if(!window.journalAccount?.user&&!llmMode&&r?.text&&(!Array.isArray(r.songs)||r.songs.length!==3)){r.source='random';r.songs=randomSongs();write(day,r)}viewSongs(r);note();$('dayTitle').focus();
 }
@@ -97,7 +99,13 @@ function startWait(ctrl,day){
  ctrl.signal.addEventListener('abort',stop,{once:true});
  return {stop,elapsed};
 }
+$('modelChoice').onchange=note;
 async function saveWithLLM(day,text,mood,excluded=[]){
+ if(!$('modelChoice').checked){
+ if(excluded.length){$('message').textContent='Enable the recommendation option first.';return}
+ const old=read(day);const entry=old?.text===text&&old.mood===mood?old:{text,mood,source:'none',songs:[]};
+ if(await write(day,entry)){dirty=false;viewSongs(entry);$('remove').hidden=false;$('message').textContent='Entry saved without sending it for recommendations.'}return;
+ }
  // A failed new request must not look like another successful copy of an old response.
  const r={text,mood,source:'none',songs:[]};
  if(!await write(day,r))return;

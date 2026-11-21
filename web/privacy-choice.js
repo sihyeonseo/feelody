@@ -1,0 +1,4 @@
+(()=>{const key='feelody:analytics:v1';let allowed=false;try{allowed=localStorage.getItem(key)==='yes'}catch{}
+const box=document.getElementById('analytics');if(box){box.checked=allowed;box.onchange=()=>{try{localStorage.setItem(key,box.checked?'yes':'no');document.getElementById('result').textContent='Preference saved.'}catch{box.checked=allowed;document.getElementById('result').textContent='Your browser did not save this preference.'}};return}
+if(!allowed)return;for(const tpl of document.querySelectorAll('template[data-analytics]')){for(const src of tpl.content.querySelectorAll('script')){const s=document.createElement('script');for(const a of src.attributes)s.setAttribute(a.name,a.value);s.textContent=src.textContent;document.head.append(s)}}
+})();

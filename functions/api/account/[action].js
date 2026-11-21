@@ -19,7 +19,8 @@ export function returnPath(value,origin){
  return '/';
 }
 export const onRequest=ctx=>handleAccount(ctx);
-export async function handleAccount({request:req,env,params},adminHandler){
+export async function handleAccount(ctx,adminHandler){
+ const {request:req,env,params}=ctx;
  const url=new URL(req.url),origin=url.origin,action=params.action;
  const headers=new Headers({'Cache-Control':'private, no-store','Referrer-Policy':'no-referrer','X-Content-Type-Options':'nosniff'});
  const json=(data,status=200)=>{headers.set('Content-Type','application/json');return new Response(JSON.stringify(data),{status,headers})};
@@ -41,17 +42,18 @@ export async function handleAccount({request:req,env,params},adminHandler){
  const {provider,next}=await req.json();if(provider!=='google')return json({},400);
  const verifier=b64(crypto.getRandomValues(new Uint8Array(48)));
  const to=new URL(base+'/auth/v1/authorize');
- to.search=new URLSearchParams({provider,redirect_to:origin+root+'callback',code_challenge:b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier))),code_challenge_method:'s256'});
+ to.search=new URLSearchParams({provider,prompt:'select_account',redirect_to:origin+root+'callback',code_challenge:b64(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(verifier))),code_challenge_method:'s256'});
  const path=returnPath(next,origin);if(path.length>1500)return json({},400);
  set('pkce',verifier,600);set('next',path,600);return json({url:to.href});
  }
  if(!adminHandler&&action==='callback'){
  const next=returnPath(get('next'),origin),verifier=get('pkce'),code=url.searchParams.get('code');
  set('pkce','',0);set('next','',0);
- if(verifier&&code){try{const r=await remote('/auth/v1/token?grant_type=pkce',{method:'POST',body:JSON.stringify({auth_code:code,code_verifier:verifier})});if(r.ok){const session=await r.json();put(session);await record(session.access_token,'login');return go(next)}}catch{}}
+ if(verifier&&code){try{const r=await remote('/auth/v1/token?grant_type=pkce',{method:'POST',body:JSON.stringify({auth_code:code,code_verifier:verifier})});if(r.ok){const session=await r.json();put(session);if(writer.length>=32){const log=record(session.access_token,'login');if(ctx.waitUntil)ctx.waitUntil(log);else await log}return go(next)}}catch{}}
  const back=new URL(next,origin);back.searchParams.set('login','failed');return go(back.pathname+back.search+back.hash)
  }
  if(!adminHandler&&!['session','entries','save','remove','import','logout','withdraw','activity-choice','visit'].includes(action))return json({},404);
+ if(!adminHandler&&action==='visit'&&writer.length<32)return json({});
  let access=get('access'),refresh=get('refresh');const bearer=()=>({Authorization:'Bearer '+access});
  let user=null;
  if(access){const r=await remote('/auth/v1/user',{headers:bearer()});if(r.ok)user=await r.json();else if(![401,403].includes(r.status))return json({},503)}

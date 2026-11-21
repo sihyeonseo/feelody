@@ -1,12 +1,12 @@
 <!doctype html>
 <html lang="en"><head>
 <!-- Google Tag Manager -->
-<script async src="https://www.googletagmanager.com/gtm.js?id=GTM-TFRQQZRT"></script>
-<script>
+<template data-analytics><script async src="https://www.googletagmanager.com/gtm.js?id=GTM-TFRQQZRT"></script></template>
+<template data-analytics><script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-</script>
+</script></template>
 <!-- End Google Tag Manager -->
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#183e36"><title>Music lab | Feelody</title>
 <meta name="description" content="Explore our archived K-pop experiment and compare retrieval and reranking with human ratings.">
@@ -16,13 +16,13 @@
 <meta property="og:image" content="https://feelody.shop/share.png"><meta property="og:image:alt" content="Feelody mood calendar"><meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://feelody.shop/#website","name":"Feelody","url":"https://feelody.shop/","inLanguage":"en"},{"@type":"WebPage","url":"https://feelody.shop/research.html","name":"Music lab | Feelody","description":"Explore our archived K-pop experiment and compare retrieval and reranking with human ratings.","inLanguage":"en","isPartOf":{"@id":"https://feelody.shop/#website"}}]}</script><link rel="stylesheet" href="./research.css"><script src="./research.js" defer></script><meta name="google-adsense-account" content="ca-pub-4639776942447769">
 
-<script type="text/javascript">
+<template data-analytics><script type="text/javascript">
     (function(c,l,a,r,i,t,y){
         c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
         t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
         y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
     })(window, document, "clarity", "script", "zg3xfuc7gn");
-</script>
+</script></template>
 </head>
 <body><header><b><i aria-hidden="true">♪</i> Feelody</b><a href="./">← Mood calendar</a></header>
 <main data-clarity-mask="true"><div class="intro"><small>FEELING × MELODY</small><h1>One journal entry,<br>two ways to rank songs<span>.</span></h1><p>This lab preserves our original K-pop experiment. Retrieval finds lyrics with similar meaning; reranking compares the same candidates a second time. These are recorded research results, separate from the Billboard recommendations in your calendar.</p></div>
@@ -30,4 +30,4 @@
 <div id="samples"><label for="cases">Entry theme</label><select id="cases"></select><p>We publish themes rather than private entries. The results were computed using the original text.</p></div>
 <form id="entry" hidden><label for="diary">How did you feel?</label><textarea id="diary" rows="5" required maxlength="4000" placeholder="What was your day like?"></textarea><p id="hint"></p><button id="submit" class="primary">Find three songs</button></form></section>
 <section class="panel record"><small>02　/　TRACKLIST</small><h2 id="title">Recommended tracks</h2><div id="methods" class="switch"><button id="rerank" aria-pressed="true">Reranked</button><button id="search" aria-pressed="false">Retrieval only</button></div><p id="status" role="status"></p><ol id="tracks"></ol></section></div>
-<footer><strong>Feelody Research</strong><a href="./#dataNotice">Data &amp; ads</a><span>E5-large retrieval · KURE-nano reranking</span></footer></main><script defer src="/activity.js"></script></body></html>
+<footer><strong>Feelody Research</strong><a href="./#dataNotice">Data &amp; ads</a><span>E5-large retrieval · KURE-nano reranking</span><a href="/privacy.html">Privacy &amp; choices</a></footer></main><script defer src="/activity.js"></script><script defer src="/privacy-choice.js"></script></body></html>
