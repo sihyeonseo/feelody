@@ -52,7 +52,7 @@ export async function handleAccount(ctx,adminHandler){
  if(verifier&&code){try{const r=await remote('/auth/v1/token?grant_type=pkce',{method:'POST',body:JSON.stringify({auth_code:code,code_verifier:verifier})});if(r.ok){const session=await r.json();put(session);if(writer.length>=32){const log=record(session.access_token,'login');if(ctx.waitUntil)ctx.waitUntil(log);else await log}return go(next)}}catch{}}
  const back=new URL(next,origin);back.searchParams.set('login','failed');return go(back.pathname+back.search+back.hash)
  }
- if(!adminHandler&&!['session','entries','save','remove','import','logout','withdraw','activity-choice','visit'].includes(action))return json({},404);
+ if(!adminHandler&&!['session','entries','save','remove','import','logout','withdraw','choices','visit'].includes(action))return json({},404);
  if(!adminHandler&&action==='visit'&&writer.length<32)return json({});
  let access=get('access'),refresh=get('refresh');const bearer=()=>({Authorization:'Bearer '+access});
  let user=null;
@@ -60,16 +60,17 @@ export async function handleAccount(ctx,adminHandler){
  if(!user&&refresh){const r=await remote('/auth/v1/token?grant_type=refresh_token',{method:'POST',body:JSON.stringify({refresh_token:refresh})});if(r.ok){const s=await r.json();put(s);access=s.access_token;user=s.user}else if(r.status===400||r.status===401){clear()}else return json({},503)}
  if(adminHandler){
   if(!user?.id)return go('/admin/login');
-  const role=await remote('/rest/v1/profiles?select=role&id=eq.'+encodeURIComponent(user.id),{headers:bearer()});
+  const role=await remote('/rest/v1/profiles?select=role,terms_accepted_at&id=eq.'+encodeURIComponent(user.id),{headers:bearer()});
   if(!role.ok)return json({},503);
-  if((await role.json())[0]?.role!=='Admin')return new Response('관리자 권한이 있는 계정만 접근할 수 있습니다.',{status:403,headers});
+  const adminProfile=(await role.json())[0];if(adminProfile&&!adminProfile.terms_accepted_at)return go('/?after=admin');
+  if(adminProfile?.role!=='Admin')return new Response('관리자 권한이 있는 계정만 접근할 수 있습니다.',{status:403,headers});
   return await adminHandler({headers,remote,bearer,go});
  }
  if(action==='session'&&user?.id){
- const r=await remote('/rest/v1/profiles?select=id,activity_opt_in_at&id=eq.'+encodeURIComponent(user.id),{headers:bearer()});
+ const r=await remote('/rest/v1/profiles?select=id,terms_accepted_at,ai_opt_in_at,activity_opt_in_at&id=eq.'+encodeURIComponent(user.id),{headers:bearer()});
  if(!r.ok)return json({},503);
  const profile=(await r.json())[0];if(!profile){clear();return json({configured:true,user:null,withdrawn:true})}
- return json({configured:true,user:user.id,avatarUrl:avatar(user),activityEnabled:!!profile.activity_opt_in_at,activityAvailable:writer.length>=32});
+ return json({configured:true,user:user.id,avatarUrl:avatar(user),termsAccepted:!!profile.terms_accepted_at,aiEnabled:!!profile.ai_opt_in_at,activityEnabled:!!profile.activity_opt_in_at,activityAvailable:writer.length>=32});
  }
  if(action==='session')return json({configured:true,user:user?.id||null,avatarUrl:user?.id?avatar(user):null});
  if(action==='logout'){if(user){const r=await remote('/auth/v1/logout?scope=local',{method:'POST',headers:bearer()});if(!r.ok)return json({},503);await record(access,'logout')}clear();return json({})}
@@ -79,10 +80,10 @@ export async function handleAccount(ctx,adminHandler){
  const r=await activity(access,'visit',b.screen);return json({},r.ok?200:503)
  }
  if(!user?.id||req.headers.get('X-Feelody-Account')!==user.id)return json({},401);
- if(action==='activity-choice'){
- const b=await req.json();if(typeof b.enable!=='boolean')return json({},400);
- if(b.enable&&writer.length<32)return json({},503);
- const r=await activity(access,b.enable?'enable':'disable');return json({},r.ok?200:503)
+ if(action==='choices'){
+ const b=await req.json();if(!['acceptRequired','allowAI','allowActivity'].every(k=>typeof b[k]==='boolean'))return json({},400);
+ const r=await remote('/rest/v1/rpc/feelody_save_choices',{method:'POST',headers:{...bearer(),'X-Feelody-Writer':writer},body:JSON.stringify({accept_required:b.acceptRequired,allow_ai:b.allowAI,allow_activity:b.allowActivity})});
+ return json({},r.ok?200:r.status)
  }
  if(action==='withdraw'){
  const r=await remote('/rest/v1/rpc/feelody_withdraw',{method:'POST',headers:bearer(),body:'{}'});

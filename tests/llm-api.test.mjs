@@ -10,7 +10,7 @@ function req(body={diary:'기쁜 하루',mood:'joy'},method='POST'){
  return {method,body,headers:{'content-type':'application/json',host:'feelody.example',origin:'https://feelody.example','CF-Connecting-IP':'test-'+ ++seq}};
 }
 async function call(r){
- const request=new Request('https://feelody.example/api/recommend',{method:r.method,headers:r.headers,...(r.method==='POST'?{body:JSON.stringify(r.body)}:{})});
+ const request=new Request('https://feelody.example/api/recommend',{method:r.method,headers:r.headers,...(r.method==='POST'?{body:JSON.stringify({...r.body,allow_ai:r.body?.allow_ai??true})}:{})});
  const res=await onRequest({request,env:process.env});return {code:res.status,headers:{'Cache-Control':res.headers.get('Cache-Control')},value:await res.json()};
 }
 test('Pages Function handler contracts without real provider calls',async()=>{
@@ -29,6 +29,7 @@ test('Pages Function handler contracts without real provider calls',async()=>{
   assert.equal(new URL(result.value.songs[0].youtube_url).hostname,'www.youtube.com');
   assert.ok(!JSON.stringify(result.value).includes('test-secret'));
   assert.equal(JSON.parse(calls[0].opts.body).store,false);
+  const before=calls.length;assert.equal((await call(req({diary:'private',allow_ai:false}))).code,403);assert.equal(calls.length,before);
   const repeated=await call(req({diary:'다른 곡 원함',excluded_songs:[fixture.songs[0]]}));
   assert.equal(repeated.code,502);assert.equal(repeated.value.code,'REPEATED_SELECTION');
   assert.equal((await call(req({diary:'테스트',excluded_songs:'invalid'}))).code,422);

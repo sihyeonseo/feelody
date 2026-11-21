@@ -85,6 +85,16 @@ async function recommend({request:req,env}){
    excluded=body.excluded_songs.map(s=>({title:text(s.title,150),artist:text(s.artist,150)}));
   }
  }catch{return reply(422,{message:'Could not read the previous playlist.'})}
+ // Require an explicit guest choice or check the signed-in account's current DB choices.
+ if(body.allow_ai!==true)return reply(403,{message:'Enable song recommendations in Privacy & choices first.'});
+ const cookie=req.headers.get('Cookie')||'';
+ if(/(?:^|;\s*)__Host-feelody-(?:access|refresh)=/.test(cookie)){
+  const token=cookie.match(/(?:^|;\s*)__Host-feelody-access=([^;]+)/)?.[1];
+  if(!token)return reply(401,{message:'Refresh your session and try again.'});
+  const result=await fetch(env.SUPABASE_URL.replace(/\/$/,'')+'/rest/v1/profiles?select=id&terms_accepted_at=not.is.null&ai_opt_in_at=not.is.null&deleted_at=is.null',{headers:{apikey:env.SUPABASE_PUBLISHABLE_KEY,Authorization:'Bearer '+decodeURIComponent(token)},cache:'no-store'});
+  if(!result.ok)return reply(result.status===401?401:503,{message:'Could not verify recommendation preferences. Reload and try again.'});
+  if(!(await result.json()).length)return reply(403,{message:'Enable song recommendations in Privacy & choices first.'});
+ }
  if(await limited(req)){headers.set('Retry-After','60');return reply(429,{message:'Too many requests. Please try again in a minute.'})}
  inFlight++;
  try{

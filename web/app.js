@@ -46,15 +46,13 @@ function viewSongs(r){
  }
 }
 function note(){
- $('modelChoiceLabel').hidden=!llmMode;
- $('save').textContent=llmMode&&!$('modelChoice').checked?'Save entry':'Find my songs';
+ $('save').textContent=llmMode&&!window.journalAccount?.allowsAI?'Save entry':'Find my songs';
  if(active)$('modeNote').textContent=!ready?'Checking recommendations…':llmMode?
   (llmConfigured?'Save your entry here, or choose to send it for song recommendations.':llmMessage||'Recommendations are unavailable. Your entry can still be saved in this browser.'):
   api?'Your entry is saved in this browser and sent to the music model.':'Sample mode picks three tracks without analyzing the entry.';
  if(active&&window.journalAccount?.user)$('modeNote').textContent=$('modeNote').textContent.replaceAll('in this browser','to your account');
 }
 function openDay(day){
- $('modelChoice').checked=false;
  active=day;dirty=false;$('explain').checked=false;const r=read(day),[y,m,d]=day.split('-').map(Number);$('home').hidden=true;$('editor').hidden=false;
  $('dayTitle').textContent=new Date(y,m-1,d).toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});$('diary').value=r?.text||'';$('message').textContent='';choose(r?.mood||null,!!r);$('remove').hidden=!r;if(!window.journalAccount?.user&&!llmMode&&r?.text&&(!Array.isArray(r.songs)||r.songs.length!==3)){r.source='random';r.songs=randomSongs();write(day,r)}viewSongs(r);note();$('dayTitle').focus();
 }
@@ -99,7 +97,7 @@ function startWait(ctrl,day){
  ctrl.signal.addEventListener('abort',stop,{once:true});
  return {stop,elapsed};
 }
-$('modelChoice').onchange=note;
+
 async function readPlaylistResponse(resp){
  const ref=(resp.headers.get('cf-ray')||'').replace(/[^a-zA-Z0-9-]/g,'').slice(0,40);
  const fail=()=>Error('Playlist unavailable (HTTP '+resp.status+(ref?', ref '+ref:'')+'). Please try again later.');
@@ -107,8 +105,8 @@ async function readPlaylistResponse(resp){
  try{const value=await resp.json();if(!value||typeof value!=='object'||Array.isArray(value))throw fail();return value}catch{throw fail()}
 }
 async function saveWithLLM(day,text,mood,excluded=[]){
- if(!$('modelChoice').checked){
- if(excluded.length){$('message').textContent='Enable the recommendation option first.';return}
+ if(!window.journalAccount?.allowsAI){
+ if(excluded.length){$('message').textContent='Enable recommendations in Privacy & choices first.';return}
  const old=read(day);const entry=old?.text===text&&old.mood===mood?old:{text,mood,source:'none',songs:[]};
  if(await write(day,entry)){dirty=false;viewSongs(entry);$('remove').hidden=false;$('message').textContent='Entry saved without sending it for recommendations.'}return;
  }
@@ -122,7 +120,7 @@ async function saveWithLLM(day,text,mood,excluded=[]){
  const timer=setTimeout(()=>ctrl.abort(),55000);
  try{
   const resp=await fetch('/api/recommend',{method:'POST',cache:'no-store',headers:{'Content-Type':'application/json','Accept':'application/json'},
-   body:JSON.stringify({diary:text,mood,excluded_songs:excluded}),signal:ctrl.signal});
+   body:JSON.stringify({diary:text,mood,excluded_songs:excluded,allow_ai:true}),signal:ctrl.signal});
   const data=await readPlaylistResponse(resp);
   if(!resp.ok)throw Error(typeof data.message==='string'?data.message:'Could not get recommendations.');
   if(data.source!=='llm'||typeof data.summary!=='string'||typeof data.empathy!=='string'||
