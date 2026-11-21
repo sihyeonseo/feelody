@@ -1,3 +1,3 @@
-(()=>{const send=screen=>{fetch('/api/account/visit',{method:'POST',credentials:'same-origin',referrerPolicy:'no-referrer',headers:{'Content-Type':'application/json'},body:JSON.stringify({screen})}).catch(()=>{})};
+(()=>{const send=screen=>{fetch('/api/account/visit',{method:'POST',credentials:'same-origin',referrerPolicy:'origin',headers:{'Content-Type':'application/json'},body:JSON.stringify({screen})}).catch(()=>{})};
 const path=location.pathname.replace(/\.html$/,'');if(path==='/research'||path==='/study'){send(path.slice(1));return}
 const editor=document.getElementById('editor');if(!editor)return;let last;const changed=()=>{const next=editor.hidden?'calendar':'entry';if(next!==last){last=next;send(next)}};changed();new MutationObserver(changed).observe(editor,{attributes:true,attributeFilter:['hidden']});})();
