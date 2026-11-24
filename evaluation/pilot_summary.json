@@ -1,0 +1,307 @@
+{
+  "per_diary": [
+    {
+      "diary": "AIREF_004",
+      "judged": 9,
+      "positives": 2,
+      "status": "rerank_miss",
+      "scores": {
+        "E5": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 1.0,
+          "pooled_ndcg": 0.6131471927654584
+        },
+        "KURE": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": 0.0
+        },
+        "BGE": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 1.0,
+          "pooled_ndcg": 0.6131471927654584
+        }
+      }
+    },
+    {
+      "diary": "AIREF_008",
+      "judged": 9,
+      "positives": 4,
+      "status": "top3_hit",
+      "scores": {
+        "E5": {
+          "precision": 0.6666666666666666,
+          "hit": 1,
+          "mrr": 1.0,
+          "pooled_ndcg": 0.8178747578506881
+        },
+        "KURE": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 0.5,
+          "pooled_ndcg": 0.2302355220228817
+        },
+        "BGE": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 0.3333333333333333,
+          "pooled_ndcg": 0.2050392536704803
+        }
+      }
+    },
+    {
+      "diary": "AIREF_019",
+      "judged": 8,
+      "positives": 3,
+      "status": "top3_hit",
+      "scores": {
+        "E5": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": 0.0
+        },
+        "KURE": {
+          "precision": 1.0,
+          "hit": 1,
+          "mrr": 1.0,
+          "pooled_ndcg": 0.8075588805057204
+        },
+        "BGE": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": 0.04811027987356989
+        }
+      }
+    },
+    {
+      "diary": "AIREF_026",
+      "judged": 7,
+      "positives": 1,
+      "status": "rerank_miss",
+      "scores": {
+        "E5": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": 0.0
+        },
+        "KURE": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": 0.0
+        },
+        "BGE": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 0.5,
+          "pooled_ndcg": 0.6309297535714574
+        }
+      }
+    },
+    {
+      "diary": "AIREF_028",
+      "judged": 8,
+      "positives": 1,
+      "status": "top3_hit",
+      "scores": {
+        "E5": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": 0.08268058728704288
+        },
+        "KURE": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 0.3333333333333333,
+          "pooled_ndcg": 0.45865970635647857
+        },
+        "BGE": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 0.3333333333333333,
+          "pooled_ndcg": 0.45865970635647857
+        }
+      }
+    },
+    {
+      "diary": "AIREF_030",
+      "judged": 9,
+      "positives": 3,
+      "status": "top3_hit",
+      "scores": {
+        "E5": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": 0.0
+        },
+        "KURE": {
+          "precision": 0.6666666666666666,
+          "hit": 1,
+          "mrr": 1.0,
+          "pooled_ndcg": 0.9037794402528602
+        },
+        "BGE": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 0.5,
+          "pooled_ndcg": 0.1821252421493118
+        }
+      }
+    },
+    {
+      "diary": "AIREF_039",
+      "judged": 30,
+      "positives": 2,
+      "status": "rerank_miss",
+      "scores": {
+        "E5": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": 0.0
+        },
+        "KURE": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": 0.0
+        },
+        "BGE": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": 0.06717171396683416
+        }
+      }
+    },
+    {
+      "diary": "AIREF_044",
+      "judged": 7,
+      "positives": 2,
+      "status": "top3_hit",
+      "scores": {
+        "E5": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 0.5,
+          "pooled_ndcg": 0.5234343216411389
+        },
+        "KURE": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 0.5,
+          "pooled_ndcg": 0.47020199776783905
+        },
+        "BGE": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 0.5,
+          "pooled_ndcg": 0.20151514190050243
+        }
+      }
+    },
+    {
+      "diary": "AIREF_045",
+      "judged": 8,
+      "positives": 0,
+      "status": "unresolved",
+      "scores": {
+        "E5": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": null
+        },
+        "KURE": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": null
+        },
+        "BGE": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": null
+        }
+      }
+    },
+    {
+      "diary": "AIREF_060",
+      "judged": 7,
+      "positives": 2,
+      "status": "top3_hit",
+      "scores": {
+        "E5": {
+          "precision": 0.0,
+          "hit": 0,
+          "mrr": 0,
+          "pooled_ndcg": 0.0
+        },
+        "KURE": {
+          "precision": 0.6666666666666666,
+          "hit": 1,
+          "mrr": 1.0,
+          "pooled_ndcg": 1.0
+        },
+        "BGE": {
+          "precision": 0.3333333333333333,
+          "hit": 1,
+          "mrr": 0.3333333333333333,
+          "pooled_ndcg": 0.3776273968978487
+        }
+      }
+    }
+  ],
+  "failure_counts": {
+    "rerank_miss": 3,
+    "top3_hit": 6,
+    "unresolved": 1
+  },
+  "macro": {
+    "E5": {
+      "precision": 0.13333333333333333,
+      "precision_n": 10,
+      "hit": 0.3,
+      "hit_n": 10,
+      "mrr": 0.25,
+      "mrr_n": 10,
+      "pooled_ndcg": 0.2263485399493698,
+      "pooled_ndcg_n": 9
+    },
+    "KURE": {
+      "precision": 0.3333333333333333,
+      "precision_n": 10,
+      "hit": 0.6,
+      "hit_n": 10,
+      "mrr": 0.43333333333333335,
+      "mrr_n": 10,
+      "pooled_ndcg": 0.4300483941006422,
+      "pooled_ndcg_n": 9
+    },
+    "BGE": {
+      "precision": 0.2333333333333333,
+      "precision_n": 10,
+      "hit": 0.7,
+      "hit_n": 10,
+      "mrr": 0.35,
+      "mrr_n": 10,
+      "pooled_ndcg": 0.3093695201279935,
+      "pooled_ndcg_n": 9
+    }
+  },
+  "timing_median_s": {
+    "search_s": 0.4897560275003343,
+    "rerank_s": 16.756651851999777,
+    "total_s": 17.094944596999994
+  },
+  "rerank_share": 0.9736163007723324
+}

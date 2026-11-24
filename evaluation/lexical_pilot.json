@@ -1,0 +1,132 @@
+[
+  {
+    "diary": "AIREF_004",
+    "top": [
+      "bd25af0b02e696438d7b1feda7e91e4341b4d25a7674bd4702f86dcd4e6c5598",
+      "e6eab4a8a48e82e061d883d090e144c9b5a4aaef85647548e7b007c4007b2d85",
+      "9decc312c082ce1f7d488b8c24073c66e9209c30387a08b2be943c8f27363126"
+    ],
+    "grades": [
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "diary": "AIREF_008",
+    "top": [
+      "f1ac3eb071dbf99039a1668e5491fbecd01c99e043acad99d0281a4e4dfc4571",
+      "277a4e75d5296a8cc072351f87e8fd61b87f257fcaca5e50f3a5580ccd3ec304",
+      "6f5f40036764186cb10639f24cce7d90831b924a0eedf8459da24974aa5fd5ad"
+    ],
+    "grades": [
+      2,
+      2,
+      null
+    ]
+  },
+  {
+    "diary": "AIREF_019",
+    "top": [
+      "260f91d1a3a4f50e8ebb91b3aa0703efc9a823ef7e1d97b0f46791294ce89337",
+      "39e26c536ef3bc61ce529f73e80b549b485bfb54d3df2e8e72115b7fab67347f",
+      "e6eab4a8a48e82e061d883d090e144c9b5a4aaef85647548e7b007c4007b2d85"
+    ],
+    "grades": [
+      null,
+      0,
+      null
+    ]
+  },
+  {
+    "diary": "AIREF_026",
+    "top": [
+      "bd25af0b02e696438d7b1feda7e91e4341b4d25a7674bd4702f86dcd4e6c5598",
+      "286de4130806ad98c552cccfc7726b1508a3c0c6526dd57a9faf5744c39410de",
+      "72cb36d7e44c9aa8b646606f6f197f21fd230b7a016757fff8bd815a255f5079"
+    ],
+    "grades": [
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "diary": "AIREF_028",
+    "top": [
+      "43ebe2f5c4b2a71edf72b3c0466722e5c57ab19e3b5441ec0514e3bd5ced8dfc",
+      "260f91d1a3a4f50e8ebb91b3aa0703efc9a823ef7e1d97b0f46791294ce89337",
+      "7ad79137941d1ff53e6e527945319bed1c9589b6b2a2ea283d1f4d471db7e1b1"
+    ],
+    "grades": [
+      1,
+      0,
+      0
+    ]
+  },
+  {
+    "diary": "AIREF_030",
+    "top": [
+      "e208fdd60da499dbe49644db5ba3a2ba016116bd2a2c3c4efe633fc9da675841",
+      "bcf35ed108a433cc23d225883c761189e11bd8de9d563f7be45caf9670c86d82",
+      "260f91d1a3a4f50e8ebb91b3aa0703efc9a823ef7e1d97b0f46791294ce89337"
+    ],
+    "grades": [
+      null,
+      null,
+      null
+    ]
+  },
+  {
+    "diary": "AIREF_039",
+    "top": [
+      "4a866b5b66b5f41b41c56a881829700981e2493e990abbcaebefca1cc487e6f3",
+      "25fa9e1c79990562d23ca74576538ec4966a4c00a1a8515da45c7f9b20a7f222",
+      "e208fdd60da499dbe49644db5ba3a2ba016116bd2a2c3c4efe633fc9da675841"
+    ],
+    "grades": [
+      3,
+      0,
+      0
+    ]
+  },
+  {
+    "diary": "AIREF_044",
+    "top": [
+      "8ecbb6f9565ae66ae27d8e32b16329b6b335d44372be49b1f6d895517db7fb6d",
+      "a4b2224206811058cae7c5ee3d84a2f6cbed928d71ad2b557fd16222162d8773",
+      "260f91d1a3a4f50e8ebb91b3aa0703efc9a823ef7e1d97b0f46791294ce89337"
+    ],
+    "grades": [
+      1,
+      0,
+      null
+    ]
+  },
+  {
+    "diary": "AIREF_045",
+    "top": [
+      "260f91d1a3a4f50e8ebb91b3aa0703efc9a823ef7e1d97b0f46791294ce89337",
+      "8ecbb6f9565ae66ae27d8e32b16329b6b335d44372be49b1f6d895517db7fb6d",
+      "bcf35ed108a433cc23d225883c761189e11bd8de9d563f7be45caf9670c86d82"
+    ],
+    "grades": [
+      null,
+      null,
+      0
+    ]
+  },
+  {
+    "diary": "AIREF_060",
+    "top": [
+      "6d653b47669b328f24346fe4109e8bf19591e09bdedfe9e6008bb8578d4d0056",
+      "f0c221ed4f873c37b51632589b7dac146b2c743f2d38299e4f12fa18eb85fbd6",
+      "3e7cbd5126fdf4838c643939f5aaa7922d37cd13d2ace18d33acc9ca04133aaf"
+    ],
+    "grades": [
+      null,
+      null,
+      null
+    ]
+  }
+]
