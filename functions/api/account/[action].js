@@ -87,6 +87,7 @@ export async function handleAccount(ctx,adminHandler){
  }
  if(action==='withdraw'){
  const r=await remote('/rest/v1/rpc/feelody_withdraw',{method:'POST',headers:bearer(),body:'{}'});
+ if(r.status===409 && (await r.json()).message==='last_admin')return json({code:'last_admin'},409);
  if(!r.ok)return json({},r.status);
  clear();return json({withdrawn:true});
  }
