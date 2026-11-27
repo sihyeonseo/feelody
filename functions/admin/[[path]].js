@@ -2,13 +2,14 @@ import {handleAccount} from '../api/account/[action].js';
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const paths=['/admin','/admin/members','/admin/plans'];
 function page(headers,title,body,section,status=200){
- headers.set('Content-Type','text/html; charset=utf-8');headers.set('X-Robots-Tag','noindex, nofollow');headers.set('X-Frame-Options','DENY');
+ headers.set('Content-Type','text/html; charset=utf-8');headers.set('X-Robots-Tag','noindex, nofollow');headers.set('Referrer-Policy','same-origin');headers.set('X-Frame-Options','DENY');
  headers.set('Content-Security-Policy',"default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'self'; form-action 'self'; frame-ancestors 'none'; base-uri 'none'");
  const nav=section?'<aside><b>Feelody 관리자</b><nav>'+paths.map((p,i)=>'<a '+(p===section?'aria-current="page" ':'')+'href="'+p+'">'+['대시보드','회원 관리','요금제 관리'][i]+'</a>').join('')+'</nav><button id="logout">로그아웃</button></aside>':'';
  return new Response('<!doctype html><html lang="ko"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>'+esc(title)+' | Feelody 관리자</title><style>*{box-sizing:border-box}body{margin:0;background:#f6f7f4;color:#23352d;font:16px/1.55 system-ui}.shell{min-height:100vh;display:grid;grid-template-columns:210px minmax(0,1fr)}aside{padding:28px 18px;background:#203d32;color:white}nav{display:grid;gap:8px;margin:32px 0}nav a{padding:8px;color:inherit;text-decoration:none}nav a[aria-current]{background:#38604d;border-radius:6px}main{padding:clamp(18px,5vw,60px);max-width:1100px}section,form,.card{background:white;padding:20px;border:1px solid #d7dfd9;border-radius:10px;margin:12px 0}h1{margin:0 0 18px}label{display:inline-grid;margin:6px;gap:3px}button,input{font:inherit;padding:7px;border:1px solid #aebdb3;border-radius:6px}button{cursor:pointer}a{color:#285a44}.login{min-height:100vh;display:grid;place-items:center}.login main{width:min(420px,100%)}table{width:100%;border-collapse:collapse}td,th{text-align:left;padding:8px;border-bottom:1px solid #ddd}.scroll{overflow:auto}@media(max-width:680px){.shell{display:block}aside{padding:14px}nav{display:flex;flex-wrap:wrap;margin:8px 0}}</style><div class="'+(section?'shell':'login')+'">'+nav+'<main><h1>'+esc(title)+'</h1>'+body+'</main></div><script src="/admin/ui.js" defer></script></html>',{headers,status});
 }
 const input=(p={})=>'<form method="post" action="/admin/plans">'+(p.id?'<input type="hidden" name="id" value="'+esc(p.id)+'">':'')+'<label>요금제 이름<input required maxlength="80" name="name" value="'+esc(p.name)+'"></label><label>월 요금(미국 달러)<input required type="number" min="0" max="999999.99" step=".01" name="price" value="'+(p.id?(p.monthly_usd_cents/100).toFixed(2):'0.00')+'"></label><label><span><input type="checkbox" name="active" '+(p.active?'checked':'')+'> 사용 중</span></label><button>'+(p.id?'변경 사항 저장':'요금제 만들기')+'</button></form>';
-const js=`if(document.querySelector('#confirm-email')){
+const js=`const mailRequest=document.querySelector('form[data-auto-send]');if(mailRequest)mailRequest.requestSubmit();
+ if(document.querySelector('#confirm-email')){
  const token=location.hash.slice(1);history.replaceState(null,'',location.pathname);
  const msg=document.querySelector('#confirm-email');if(!/^[a-f0-9]{64}$/.test(token))msg.textContent='링크가 올바르지 않습니다. 인증 메일을 다시 요청해 주세요.';
  else fetch('/admin/confirm',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({token})}).then(r=>{if(!r.ok||r.redirected)throw Error();location.replace('/admin')}).catch(()=>{msg.textContent='인증하지 못했습니다. 로그인한 브라우저에서 최신 링크를 열거나 메일을 다시 요청하세요.'})}
@@ -21,26 +22,25 @@ export async function onRequest(ctx){
  const verification=['/admin/verify','/admin/confirm'].includes(path);
  if(!paths.includes(path)&&!verification)return new Response('페이지를 찾을 수 없습니다.',{status:404,headers});
  if(request.method!=='GET'&&!(request.method==='POST'&&(path==='/admin/plans'||verification)))return new Response(null,{status:405,headers});
- return handleAccount({...ctx,params:{action:'admin-console'}},async({headers,remote,bearer,go})=>{
+ const result=await handleAccount({...ctx,params:{action:'admin-console'}},async({headers,remote,bearer,go})=>{
  const render=(title,body,status=200)=>page(headers,title,body,path,status);
  const db=(endpoint,opts={})=>remote('/rest/v1/'+endpoint,{...opts,headers:{...bearer(),...opts.headers}});
  const rpc=(name,data={})=>db('rpc/'+name,{method:'POST',body:JSON.stringify(data)});
  const gate=(title,body,status=200)=>page(headers,title,body,null,status);
- const mailForm='<form method="post" action="/admin/verify"><label>등록된 2차 이메일 주소<input type="email" name="address" autocomplete="email" maxlength="254" required></label><button>인증 링크 보내기</button></form>';
+ const mailForm=(automatic=false)=>'<form method="post" action="/admin/verify"'+(automatic?' data-auto-send':'')+'><button>인증 메일 보내기</button></form>';
  if(path==='/admin/confirm'){
   if(request.method==='GET')return gate('관리자 이메일 확인','<p id="confirm-email">링크를 확인하고 있습니다…</p><a href="/admin/verify">인증 메일 다시 요청</a>');
   const {token}=await request.json();if(typeof token!=='string'||!/^[a-f0-9]{64}$/.test(token))return new Response(null,{status:400,headers});
   const r=await rpc('feelody_admin_confirm_mail',{token});return new Response(null,{status:r.ok&&(await r.json())===true?204:403,headers});
  }
  if(path==='/admin/verify'&&request.method==='POST'){
-  const address=(await request.formData()).get('address');if(typeof address!=='string'||!address.includes('@')||address.length>254)return gate('이메일을 확인해 주세요',mailForm,400);
-  const r=await rpc('feelody_admin_send_mail',{address});if(!r.ok)return gate('메일을 요청하지 못했습니다','<p>잠시 후 다시 시도하거나 메일 발송 설정을 확인해 주세요.</p>'+mailForm,503);
-  return gate('메일함을 확인해 주세요','<p>등록된 주소와 일치하면 인증 링크를 보내드립니다. 10분 안에 지금 로그인한 브라우저에서 열어 주세요. 재요청은 1분 후 가능합니다.</p>'+mailForm);
+  const r=await rpc('feelody_admin_send_mail',{address:null});if(!r.ok)return gate('메일을 요청하지 못했습니다','<p>잠시 후 다시 시도하거나 메일 발송 설정을 확인해 주세요.</p>'+mailForm(),503);
+  return gate('메일함을 확인해 주세요','<p>지정된 관리자 메일함을 확인해 주세요. 10분 안에 지금 로그인한 브라우저에서 열어 주세요. 재요청은 1분 후 가능합니다.</p>'+mailForm());
  }
  const checked=await rpc('feelody_admin_verified');
  if(!checked.ok)return gate('관리자 인증을 확인할 수 없습니다','<p>이메일 인증 설정을 확인해 주세요.</p>',503);
  const verified=(await checked.json())===true;
- if(path==='/admin/verify')return verified?go('/admin'):gate('관리자 2차 인증',mailForm);
+ if(path==='/admin/verify')return verified?go('/admin'):gate('관리자 2차 인증','<p>지정된 관리자 주소로 인증 메일을 요청합니다.</p>'+mailForm(true));
  if(!verified)return request.method==='GET'?go('/admin/verify'):gate('이메일 인증이 필요합니다','<a href="/admin/verify">이메일 확인하기</a>',403);
  const err=()=>render('관리자 데이터를 불러올 수 없습니다','<p>데이터베이스 설정을 확인한 뒤 다시 시도하세요.</p>',503);
  if(request.method==='POST'){
@@ -60,4 +60,8 @@ export async function onRequest(ctx){
  const p=await plans();return render('요금제 관리','<p>요금을 저장해도 회원에게 실제로 청구되지 않습니다.</p><h2>새 요금제</h2>'+input()+'<h2>등록된 요금제</h2>'+(p.map(input).join('')||'<p>아직 등록된 요금제가 없습니다.</p>'))
  }catch{return err()}
  });
+ if(path==='/admin/verify'&&!result.ok&&result.headers.get('Content-Type')?.includes('application/json')){
+  return page(new Headers(result.headers),'인증 메일을 요청하지 못했습니다','<p>관리자 로그인부터 다시 시도해 주세요.</p><a href="/admin/login">관리자 로그인</a>',null,result.status);
+ }
+ return result;
 }
