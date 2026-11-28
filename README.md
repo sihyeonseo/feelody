@@ -6,6 +6,8 @@ The English-language journal selects three tracks from a fixed historical US Bil
 
 **별도 연구 경로:** 원문 가사 → E5-large 검색 30곡 → KURE-nano 재순위화 → 3곡. 같은 가사 그룹은 검색 후보에서 한 번만 센다. 아래 10편 파일럿은 이 연구 경로의 결과이며, 30편 비교에는 LLM 웹 서비스도 포함했다. 기존 로컬 실행과 MCP 코드는 보존했다.
 
+**한국어 한 곡 추천 연구 (A1–A4)** · E5 상위 30곡에 BM25 1위를 추가해 KURE로 재순위화했다. 블라인드 평가에서 1위 적합 일기는 개발 50/102→56/102, 보류 20/28→22/28이었다. [실험 설계·모델별 결과·오류 분석](docs/korean-hybrid-evaluation.md)
+
 **포트폴리오 설계:** [시스템 구조·API·운영 계획](docs/system-design.md) · [토스 요구 역량·평가 설계·확인된 결과](docs/evaluation-and-portfolio.md). 현재 구현과 앞으로 검증할 범위를 구분했다.
 
 **[대기열·워커·AI 추천 이유·MCP 실행](docs/jobs-and-mcp.md)** · 기존 30→3 순위를 유지하면서 웹과 MCP가 같은 로컬 추천 서버를 사용한다. 선택형 외부 해설 키는 서버에만 둔다.
